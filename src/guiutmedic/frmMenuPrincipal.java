@@ -95,9 +95,19 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
         JmenuBar.add(jMenuAgendar);
 
         jMenuReagendar.setText("Reagendar");
+        jMenuReagendar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenuReagendarMouseClicked(evt);
+            }
+        });
         JmenuBar.add(jMenuReagendar);
 
         jMenuHistorial.setText("Historial");
+        jMenuHistorial.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenuHistorialMouseClicked(evt);
+            }
+        });
         JmenuBar.add(jMenuHistorial);
 
         jMenuSalir.setText("Salir");
@@ -150,8 +160,20 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     private void jMenuAgendarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuAgendarMouseClicked
         frmAgendar ventanaGUI = new frmAgendar();   
         this.desktopPane.add(ventanaGUI);
-        ventanaGUI.setVisible(true);
+        ventanaGUI.setVisible(true);   
     }//GEN-LAST:event_jMenuAgendarMouseClicked
+
+    private void jMenuReagendarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuReagendarMouseClicked
+        frmReagendar ventanaGUI = new frmReagendar();   
+        this.desktopPane.add(ventanaGUI);
+        ventanaGUI.setVisible(true);
+    }//GEN-LAST:event_jMenuReagendarMouseClicked
+
+    private void jMenuHistorialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuHistorialMouseClicked
+        frmHistorialCitas ventanaGUI = new frmHistorialCitas();   
+        this.desktopPane.add(ventanaGUI);
+        ventanaGUI.setVisible(true);
+    }//GEN-LAST:event_jMenuHistorialMouseClicked
 
     /**
      * @param args the command line arguments
