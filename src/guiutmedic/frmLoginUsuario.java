@@ -1,6 +1,17 @@
 package guiutmedic;
 
+import guiutmedic.clases.Alumno;
+import guiutmedic.clases.AlumnoBD;
+import guiutmedic.clases.ConexionBD;
+import guiutmedic.clases.Usuario;
+import guiutmedic.clases.UsuarioBD;
 import java.awt.Color;
+import java.awt.HeadlessException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -42,6 +53,7 @@ public class frmLoginUsuario extends javax.swing.JFrame {
         setFocusable(false);
 
         backround.setBackground(new java.awt.Color(252, 252, 252));
+        backround.setToolTipText("");
         backround.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblBienvenido.setFont(new java.awt.Font("Inter", 3, 14)); // NOI18N
@@ -85,7 +97,6 @@ public class frmLoginUsuario extends javax.swing.JFrame {
         backround.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 290, 180, 10));
 
         jpasswordUsuario.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
-        jpasswordUsuario.setText("********");
         jpasswordUsuario.setBorder(null);
         jpasswordUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -154,6 +165,34 @@ public class frmLoginUsuario extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public boolean validarUsuario(Usuario objUsuario) {
+
+        //variables de clase 
+        boolean accesoPermitido = false;  //variable de retorno en caso de ser falso o verdadero
+        Connection conn;   // objeto de conexion
+        PreparedStatement stmt = null;   // variable para la sentencia sql
+        ResultSet rs = null;    //variable para resultado de consulta sql
+        //aqui se conectara a la base de datos y se buscara el usuario en la tabla de usuarios del sistema para su comparacion
+        try {
+            ConexionBD objetoConexionBD = new ConexionBD();
+            conn = objetoConexionBD.conexionDataBase();
+            UsuarioBD bd = new UsuarioBD();
+            rs = bd.consultarUsuarioLogin(conn, objUsuario.getUsuario(), objUsuario.getPassword(), objUsuario.getMatricula());
+            if (rs.next()) {  //encontro al menos 1 registro con los datos
+                //accedemos al sistema
+                accesoPermitido = true;
+            }
+            //se cierra la conexion
+            objetoConexionBD.cerrarConexion(conn);
+
+        } catch (HeadlessException | ClassNotFoundException | SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error de conexión "
+                    + ex.getMessage());
+        }
+        //regresamos si el usuario se localizo
+        return accesoPermitido;
+    }
+    
     private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtUsuarioActionPerformed

@@ -4,6 +4,16 @@
  */
 package guiutmedic;
 
+import guiutmedic.clases.ConexionBD;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author santi
@@ -13,8 +23,21 @@ public class frmPerfil extends javax.swing.JInternalFrame {
     /**
      * Creates new form frmPerfil
      */
-    public frmPerfil() {
+    
+    boolean isMod = false;
+    
+    ConexionBD objetoConexionBD = new ConexionBD();
+    Connection conn;
+    PreparedStatement stmt = null;
+    ResultSet rs = null;
+    String datoBuscar = "";
+    String dato = "";
+    
+    public frmPerfil() throws ClassNotFoundException {
         initComponents();
+        llenarDatos();
+        
+        actualizarMod();
     }
 
     /**
@@ -39,7 +62,7 @@ public class frmPerfil extends javax.swing.JInternalFrame {
         lblAlergias = new javax.swing.JLabel();
         txtAlergias = new javax.swing.JTextField();
         jLabelIDUsuario6 = new javax.swing.JLabel();
-        jTextField7 = new javax.swing.JTextField();
+        txtPadecimientos = new javax.swing.JTextField();
         btnModificar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
 
@@ -106,14 +129,19 @@ public class frmPerfil extends javax.swing.JInternalFrame {
         jLabelIDUsuario6.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         jLabelIDUsuario6.setText("Padecimientos:");
 
-        jTextField7.addActionListener(new java.awt.event.ActionListener() {
+        txtPadecimientos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField7ActionPerformed(evt);
+                txtPadecimientosActionPerformed(evt);
             }
         });
 
         btnModificar.setText("Modificar");
         btnModificar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
 
         btnGuardar.setText("Guardar");
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
@@ -132,7 +160,7 @@ public class frmPerfil extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabelIDUsuario6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtPadecimientos, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblAlergias)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -195,7 +223,7 @@ public class frmPerfil extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelIDUsuario6)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtPadecimientos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnModificar)
@@ -206,6 +234,114 @@ public class frmPerfil extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    private void vaciarDatos() {
+        txtNombre.setText("");
+        txtTelefono.setText("");
+        txtContacto.setText("");
+        txtAlergias.setText("");
+        txtPadecimientos.setText("");
+    }
+    
+    private void actualizarMod() {
+        if (isMod) {
+            vaciarDatos();
+            txtNombre.setEditable(true);
+            txtTelefono.setEditable(true);
+            txtContacto.setEditable(true);
+            txtAlergias.setEditable(true);
+            txtPadecimientos.setEditable(true);
+            System.out.println("MODIFICANDO");
+        } else {
+            txtNombre.setEditable(false);
+            txtTelefono.setEditable(false);
+            txtContacto.setEditable(false);
+            txtAlergias.setEditable(false);
+            txtPadecimientos.setEditable(false);
+            System.out.println("NO MODIFICANDO");
+        }
+    }
+    
+    private void llenarDatos() throws ClassNotFoundException {
+        String sql = "SELECT idUsuario, nombre, matricula, telefono, contactoEmergencia, alergias, condicionMedica FROM cliente";
+        
+        try {
+            conn = objetoConexionBD.conexionDataBase();
+            
+            
+//            if (dato != "") {
+//                sql += " where nombre='"+dato+"'";
+//                
+//            }
+            
+            
+            // Preparar y asignar parámetros si es necesario
+            stmt = conn.prepareStatement(sql);
+
+//                stmt.setString(1, dato);
+//            if (rbdUsuario.isSelected()) {
+//            }
+            System.out.println("Consulta SQL: " + sql);
+//            System.out.println("Dato: " + dato);
+            
+            rs = stmt.executeQuery();
+
+            // Verificar si hay resultados
+            boolean tieneDatos = false;
+            while (rs.next()) {
+                tieneDatos = true;
+                
+                
+                txtIdUsuario.setText(String.valueOf(rs.getInt("idUsuario")));
+                
+            }
+
+            if (!tieneDatos) {
+                JOptionPane.showMessageDialog(null, "¡Datos no localizados!");
+            }
+//
+//            // Actualizar tabla
+//            DefaultTableModel modelo = (DefaultTableModel) tblClientes.getModel();
+//            modelo.setRowCount(0); // Limpiar tabla
+//            for (Cliente item : arregloClientes) {
+//                Object[] fila = {
+//                    item.getIdCliente(),
+//                    item.getIdUsuario(),
+//                    item.getNombre(),
+//                    item.isBeca(),
+//                    item.getPorcentaje()
+//                };
+//                modelo.addRow(fila);
+//            }
+//
+//            tblClientes.setModel(modelo);
+//
+//            // Seleccionar la primera fila si hay datos
+//            if (tblClientes.getRowCount() > 0) {
+//                tblClientes.setRowSelectionInterval(0, 0);
+//                llenarTextBox(); // Llenar los textbox
+//            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(frmPerfil.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            // Cerrar recursos de forma segura
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(frmPerfil.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
     private void txtIdUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdUsuarioActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIdUsuarioActionPerformed
@@ -230,13 +366,21 @@ public class frmPerfil extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtAlergiasActionPerformed
 
-    private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField7ActionPerformed
+    private void txtPadecimientosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPadecimientosActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField7ActionPerformed
+    }//GEN-LAST:event_txtPadecimientosActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
+        isMod = false;
+        actualizarMod();
     }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        // TODO add your handling code here:
+        isMod = true;
+        actualizarMod();
+    }//GEN-LAST:event_btnModificarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -244,7 +388,6 @@ public class frmPerfil extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnModificar;
     private javax.swing.JLabel jLabelIDUsuario;
     private javax.swing.JLabel jLabelIDUsuario6;
-    private javax.swing.JTextField jTextField7;
     private javax.swing.JLabel lblAlergias;
     private javax.swing.JLabel lblContacto;
     private javax.swing.JLabel lblMatricula;
@@ -255,6 +398,7 @@ public class frmPerfil extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtIdUsuario;
     private javax.swing.JTextField txtMatricula;
     private javax.swing.JTextField txtNombre;
+    private javax.swing.JTextField txtPadecimientos;
     private javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
 }

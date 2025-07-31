@@ -164,7 +164,7 @@ public class AlumnoBD {
 
         return lista;
     }
-
+    
     // Métodos de cierre
     private void cerrarRecursos(PreparedStatement stmt, Connection conn) {
         try {
