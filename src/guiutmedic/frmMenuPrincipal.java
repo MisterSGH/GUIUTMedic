@@ -152,10 +152,9 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
 
     private void jMenuPerfilMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuPerfilMouseClicked
      try {
-         frmPerfil ventanaGUI;
-         ventanaGUI = new frmPerfil();
-         this.desktopPane.add(ventanaGUI);
-         ventanaGUI.setVisible(true);
+         frmPerfil ventanaPerfil = new frmPerfil();
+         this.desktopPane.add(ventanaPerfil);
+         ventanaPerfil.setVisible(true);
      } catch (ClassNotFoundException ex) {
          Logger.getLogger(frmMenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
      }

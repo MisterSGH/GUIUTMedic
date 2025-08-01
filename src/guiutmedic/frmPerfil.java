@@ -32,6 +32,7 @@ public class frmPerfil extends javax.swing.JInternalFrame {
     ResultSet rs = null;
     String datoBuscar = "";
     String dato = "";
+    int idUsuarioDeseado = 2;
     
     public frmPerfil() throws ClassNotFoundException {
         initComponents();
@@ -263,38 +264,32 @@ public class frmPerfil extends javax.swing.JInternalFrame {
     }
     
     private void llenarDatos() throws ClassNotFoundException {
-        String sql = "SELECT idUsuario, nombre, matricula, telefono, contactoEmergencia, alergias, condicionMedica FROM cliente";
+        String sql = "SELECT idUsuario, nombre, matricula, telefono, contactoEmergencia, alergias, condicionMedica FROM perfil_con_matricula WHERE idUsuario = ?";
         
         try {
             conn = objetoConexionBD.conexionDataBase();
             
             
-//            if (dato != "") {
-//                sql += " where nombre='"+dato+"'";
-//                
-//            }
-            
-            
             // Preparar y asignar parámetros si es necesario
             stmt = conn.prepareStatement(sql);
-
-//                stmt.setString(1, dato);
-//            if (rbdUsuario.isSelected()) {
-//            }
+            stmt.setInt(1, idUsuarioDeseado);
+            
             System.out.println("Consulta SQL: " + sql);
-//            System.out.println("Dato: " + dato);
             
             rs = stmt.executeQuery();
 
             // Verificar si hay resultados
             boolean tieneDatos = false;
-            while (rs.next()) {
+            if (rs.next()) {
                 tieneDatos = true;
-                
-                
-                txtIdUsuario.setText(String.valueOf(rs.getInt("idUsuario")));
-                
-            }
+                txtIdUsuario.setText(rs.getString("idUsuario"));
+                txtNombre.setText(rs.getString("nombre"));
+                txtMatricula.setText(rs.getString("matricula"));
+                txtTelefono.setText(rs.getString("telefono"));
+                txtContacto.setText(rs.getString("contactoEmergencia"));
+                txtAlergias.setText(rs.getString("alergias"));
+                txtPadecimientos.setText(rs.getString("condicionMedica"));
+}
 
             if (!tieneDatos) {
                 JOptionPane.showMessageDialog(null, "¡Datos no localizados!");

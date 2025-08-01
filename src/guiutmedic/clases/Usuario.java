@@ -33,11 +33,11 @@ public class Usuario {
      }
     
     // Constructor
-    public Usuario(int idUsuario, String matricula, String password, String usuario, String rol) {
+    public Usuario(int idUsuario, String matricula, String usuario, String password, String rol) {
         this.idUsuario = idUsuario;
         this.matricula=matricula;
-        this.password = password;
         this.usuario = usuario;
+        this.password = password;
         this.rol = rol;
     }
 

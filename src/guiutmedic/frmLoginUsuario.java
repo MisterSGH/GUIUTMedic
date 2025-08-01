@@ -1,7 +1,6 @@
 package guiutmedic;
 
-import guiutmedic.clases.Alumno;
-import guiutmedic.clases.AlumnoBD;
+
 import guiutmedic.clases.ConexionBD;
 import guiutmedic.clases.Usuario;
 import guiutmedic.clases.UsuarioBD;
