@@ -22,6 +22,10 @@ public class frmLoginUsuario extends javax.swing.JFrame {
      * Creates new form frmLoginUusario
      */
     
+    boolean pressedUsuario = false;
+    boolean pressedPass = false;
+    boolean pressedMat = false;
+    
     int idUsuarioActual;
     
     public frmLoginUsuario() {
@@ -45,10 +49,10 @@ public class frmLoginUsuario extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JSeparator();
         lblContraseña = new javax.swing.JLabel();
         jSeparator3 = new javax.swing.JSeparator();
-        jpasswordUsuario = new javax.swing.JPasswordField();
+        txtPassword = new javax.swing.JPasswordField();
         jButtonEntrar = new javax.swing.JButton();
         lblUsuario1 = new javax.swing.JLabel();
-        txtUsuario1 = new javax.swing.JTextField();
+        txtMatricula = new javax.swing.JTextField();
         jSeparator4 = new javax.swing.JSeparator();
 
         setBackground(new java.awt.Color(255, 255, 255));
@@ -98,19 +102,20 @@ public class frmLoginUsuario extends javax.swing.JFrame {
         jSeparator3.setForeground(new java.awt.Color(0, 153, 153));
         backround.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 290, 180, 10));
 
-        jpasswordUsuario.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
-        jpasswordUsuario.setBorder(null);
-        jpasswordUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
+        txtPassword.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        txtPassword.setText("aaaaaaaa");
+        txtPassword.setBorder(null);
+        txtPassword.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                jpasswordUsuarioMousePressed(evt);
+                txtPasswordMousePressed(evt);
             }
         });
-        jpasswordUsuario.addActionListener(new java.awt.event.ActionListener() {
+        txtPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jpasswordUsuarioActionPerformed(evt);
+                txtPasswordActionPerformed(evt);
             }
         });
-        backround.add(jpasswordUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 270, 170, -1));
+        backround.add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 270, 170, -1));
 
         jButtonEntrar.setBackground(new java.awt.Color(0, 153, 153));
         jButtonEntrar.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
@@ -132,21 +137,21 @@ public class frmLoginUsuario extends javax.swing.JFrame {
         lblUsuario1.setText("Matricula:");
         backround.add(lblUsuario1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, 60, -1));
 
-        txtUsuario1.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
-        txtUsuario1.setForeground(new java.awt.Color(102, 102, 102));
-        txtUsuario1.setText("Ingresa tu matricula");
-        txtUsuario1.setBorder(null);
-        txtUsuario1.addMouseListener(new java.awt.event.MouseAdapter() {
+        txtMatricula.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        txtMatricula.setForeground(new java.awt.Color(102, 102, 102));
+        txtMatricula.setText("Ingresa tu matricula");
+        txtMatricula.setBorder(null);
+        txtMatricula.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                txtUsuario1MousePressed(evt);
+                txtMatriculaMousePressed(evt);
             }
         });
-        txtUsuario1.addActionListener(new java.awt.event.ActionListener() {
+        txtMatricula.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtUsuario1ActionPerformed(evt);
+                txtMatriculaActionPerformed(evt);
             }
         });
-        backround.add(txtUsuario1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 310, 170, -1));
+        backround.add(txtMatricula, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 310, 170, -1));
 
         jSeparator4.setForeground(new java.awt.Color(0, 153, 153));
         backround.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 330, 180, 10));
@@ -177,27 +182,26 @@ public class frmLoginUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonEntrarActionPerformed
 
     private void txtUsuarioMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtUsuarioMousePressed
-        txtUsuario.setText("");
-        txtUsuario.setForeground(Color.black);
-        jpasswordUsuario.setText("********");
-        jpasswordUsuario.setForeground(Color.gray);
+        while (pressedUsuario == false) {
+            txtUsuario.setText("");
+            txtUsuario.setForeground(Color.black);
+            pressedUsuario = true;
+        }
+        
+        
     }//GEN-LAST:event_txtUsuarioMousePressed
 
-    private void jpasswordUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jpasswordUsuarioActionPerformed
+    private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jpasswordUsuarioActionPerformed
+    }//GEN-LAST:event_txtPasswordActionPerformed
 
-    private void jpasswordUsuarioMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpasswordUsuarioMousePressed
-       if(txtUsuario.getText().equals("Ingresa tu nombre de Usuario")){
-        txtUsuario.setForeground(Color.gray);
-        jpasswordUsuario.setText("");
-        jpasswordUsuario.setForeground(Color.black);
-    }
-     if (String.valueOf(jpasswordUsuario.getPassword()).isEmpty()) {
-        jpasswordUsuario.setText("*****");
-         jpasswordUsuario.setForeground(Color.GRAY);
-    }  
-    }//GEN-LAST:event_jpasswordUsuarioMousePressed
+    private void txtPasswordMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtPasswordMousePressed
+        while (pressedPass == false) {
+            txtPassword.setText("");
+            txtPassword.setForeground(Color.black);
+            pressedPass = true;
+        } 
+    }//GEN-LAST:event_txtPasswordMousePressed
 
     private void jButtonEntrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonEntrarMouseClicked
         // Este metodo captara los datos ingresados en txtUsuario y txtPassword
@@ -205,8 +209,8 @@ public class frmLoginUsuario extends javax.swing.JFrame {
         // Aqui se programara la autenticacion del usuario
         Usuario objUsuario = new Usuario();
         objUsuario.setUsuario(txtUsuario.getText());
-        objUsuario.setPassword(new String(jpasswordUsuario.getPassword()));
-        objUsuario.setMatricula(txtUsuario1.getText());
+        objUsuario.setPassword(new String(txtPassword.getPassword()));
+        objUsuario.setMatricula(txtMatricula.getText());
 
         //validando al usuario contra la base de datos
         if (this.validarUsuario(objUsuario)) {
@@ -225,13 +229,18 @@ public class frmLoginUsuario extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButtonEntrarMouseClicked
 
-    private void txtUsuario1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtUsuario1MousePressed
+    private void txtMatriculaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtMatriculaMousePressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtUsuario1MousePressed
+        while (pressedMat == false) {
+            txtMatricula.setText("");
+            txtMatricula.setForeground(Color.black);
+            pressedMat = true;
+        }
+    }//GEN-LAST:event_txtMatriculaMousePressed
 
-    private void txtUsuario1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuario1ActionPerformed
+    private void txtMatriculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMatriculaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtUsuario1ActionPerformed
+    }//GEN-LAST:event_txtMatriculaActionPerformed
 
     public boolean validarUsuario(Usuario objUsuario) {
 
@@ -257,8 +266,8 @@ public class frmLoginUsuario extends javax.swing.JFrame {
             objetoConexionBD.cerrarConexion(conn);
 
         } catch (HeadlessException | ClassNotFoundException | SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Error de conexión "
-                    + ex.getMessage());
+//            JOptionPane.showMessageDialog(this, "Error de conexión "
+//                    + ex.getMessage());
         }
         //regresamos si el usuario se localizo
         return accesoPermitido;
@@ -303,13 +312,13 @@ public class frmLoginUsuario extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
-    private javax.swing.JPasswordField jpasswordUsuario;
     private javax.swing.JLabel lblBienvenido;
     private javax.swing.JLabel lblContraseña;
     private javax.swing.JLabel lblIcono;
     private javax.swing.JLabel lblUsuario;
     private javax.swing.JLabel lblUsuario1;
+    private javax.swing.JTextField txtMatricula;
+    private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUsuario;
-    private javax.swing.JTextField txtUsuario1;
     // End of variables declaration//GEN-END:variables
 }

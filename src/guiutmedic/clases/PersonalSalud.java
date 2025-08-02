@@ -6,7 +6,8 @@ package guiutmedic.clases;
  */
 
 public class PersonalSalud {
-    private String idProfesional;
+    private int idPersonal;
+    private int idUsuario;
     private String nombre;
     private String profesion; // Sea Médico,Nutriólogo o Psicólogo
     private String correo;
@@ -18,9 +19,10 @@ public class PersonalSalud {
     public PersonalSalud() {}
     
     // Constructor 
-    public PersonalSalud(String idProfesional, String nombre, String profesion,
+    public PersonalSalud(int idPersonal, int idUsuario, String nombre, String profesion,
                          String correo, String telefono) {
-        this.idProfesional = idProfesional;
+        this.idPersonal = idPersonal;
+        this.idUsuario = idUsuario;
         this.nombre = nombre;
         this.profesion = profesion;
         this.correo = correo;
@@ -28,10 +30,18 @@ public class PersonalSalud {
         this.activo = true;
     }
 
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
     // Getters
     
-     public String getIdProfesional() 
-     { return idProfesional; }
+     public int getIdPersonal() 
+     { return idPersonal; }
      
      public String getNombre() 
      { return nombre; }
@@ -47,8 +57,8 @@ public class PersonalSalud {
      
   //Setters  
      
-    public void setIdProfesional(String idProfesional) 
-    { this.idProfesional = idProfesional; }
+    public void setIdPersonal(int idPersonal) 
+    { this.idPersonal = idPersonal; }
     
     public void setNombre(String nombre) 
     { this.nombre = nombre; }
@@ -74,7 +84,7 @@ public class PersonalSalud {
     }
 
     public String mostrarInfo() {
-        return "ID: " + idProfesional + "\nNombre: " + nombre + "\nProfesión: " + profesion +
+        return "ID: " + idPersonal + "\nNombre: " + nombre + "\nProfesión: " + profesion +
                "\nCorreo: " + correo + "\nTeléfono: " + telefono + "\nActivo: " + activo;
     }
 }
