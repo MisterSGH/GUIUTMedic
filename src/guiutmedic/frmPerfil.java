@@ -5,6 +5,7 @@
 package guiutmedic;
 
 import guiutmedic.clases.ConexionBD;
+import guiutmedic.frmMenuPrincipal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -32,10 +33,21 @@ public class frmPerfil extends javax.swing.JInternalFrame {
     ResultSet rs = null;
     String datoBuscar = "";
     String dato = "";
-    int idUsuarioDeseado = 2;
+    private frmMenuPrincipal menuPadre;
+    int idUsuarioDeseado;
+
+    public int getIdUsuarioDeseado() {
+        return idUsuarioDeseado;
+    }
+
+    public void setIdUsuarioDeseado(int idUsuarioDeseado) {
+        this.idUsuarioDeseado = idUsuarioDeseado;
+    }
     
-    public frmPerfil() throws ClassNotFoundException {
+    public frmPerfil(frmMenuPrincipal menuPadre) throws ClassNotFoundException {
         initComponents();
+        this.menuPadre = menuPadre;
+        idUsuarioDeseado = menuPadre.getIdUsuarioActual();
         llenarDatos();
         
         actualizarMod();
@@ -236,24 +248,20 @@ public class frmPerfil extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     
-    private void vaciarDatos() {
-        txtNombre.setText("");
-        txtTelefono.setText("");
-        txtContacto.setText("");
-        txtAlergias.setText("");
-        txtPadecimientos.setText("");
-    }
+    
     
     private void actualizarMod() {
         if (isMod) {
-            vaciarDatos();
+            this.setTitle("Ventana de Perfil (MODIFICANDO)");
             txtNombre.setEditable(true);
             txtTelefono.setEditable(true);
             txtContacto.setEditable(true);
             txtAlergias.setEditable(true);
             txtPadecimientos.setEditable(true);
             System.out.println("MODIFICANDO");
+            System.out.println("ID Usuario: "+idUsuarioDeseado);
         } else {
+            this.setTitle("Ventana de Perfil");
             txtNombre.setEditable(false);
             txtTelefono.setEditable(false);
             txtContacto.setEditable(false);
@@ -273,6 +281,7 @@ public class frmPerfil extends javax.swing.JInternalFrame {
             // Preparar y asignar parámetros si es necesario
             stmt = conn.prepareStatement(sql);
             stmt.setInt(1, idUsuarioDeseado);
+            
             
             System.out.println("Consulta SQL: " + sql);
             
@@ -294,48 +303,49 @@ public class frmPerfil extends javax.swing.JInternalFrame {
             if (!tieneDatos) {
                 JOptionPane.showMessageDialog(null, "¡Datos no localizados!");
             }
-//
-//            // Actualizar tabla
-//            DefaultTableModel modelo = (DefaultTableModel) tblClientes.getModel();
-//            modelo.setRowCount(0); // Limpiar tabla
-//            for (Cliente item : arregloClientes) {
-//                Object[] fila = {
-//                    item.getIdCliente(),
-//                    item.getIdUsuario(),
-//                    item.getNombre(),
-//                    item.isBeca(),
-//                    item.getPorcentaje()
-//                };
-//                modelo.addRow(fila);
-//            }
-//
-//            tblClientes.setModel(modelo);
-//
-//            // Seleccionar la primera fila si hay datos
-//            if (tblClientes.getRowCount() > 0) {
-//                tblClientes.setRowSelectionInterval(0, 0);
-//                llenarTextBox(); // Llenar los textbox
-//            }
+
 
         } catch (SQLException ex) {
             Logger.getLogger(frmPerfil.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             // Cerrar recursos de forma segura
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (stmt != null) {
-                    stmt.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(frmPerfil.class.getName()).log(Level.SEVERE, null, ex);
-            }
+//            try {
+//                if (rs != null) {
+//                    rs.close();
+//                }
+//                if (stmt != null) {
+//                    stmt.close();
+//                }
+//                if (conn != null) {
+//                    conn.close();
+//                }
+//            } catch (SQLException ex) {
+//                Logger.getLogger(frmPerfil.class.getName()).log(Level.SEVERE, null, ex);
+//            }
         }
     }
+    
+    private void guardarDatos() throws ClassNotFoundException, SQLException {
+    String sql = "UPDATE perfil_con_matricula SET nombre = ?, telefono = ?, contactoEmergencia = ?, alergias = ?, condicionMedica = ? WHERE idUsuario = ?";
+    conn = objetoConexionBD.conexionDataBase();
+    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setString(1, txtNombre.getText());
+        stmt.setString(2, txtTelefono.getText());
+        stmt.setString(3, txtContacto.getText());
+        stmt.setString(4, txtAlergias.getText());
+        stmt.setString(5, txtPadecimientos.getText());
+        stmt.setInt(6, idUsuarioDeseado);  
+
+        int filasActualizadas = stmt.executeUpdate();
+
+        if (filasActualizadas > 0) {
+            System.out.println("Datos modificados correctamente.");
+            JOptionPane.showMessageDialog(this,"Datos modificados correctamente.");
+        } else {
+            System.out.println("No se modificó ningún registro.");
+        }
+    }
+}
     
     private void txtIdUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdUsuarioActionPerformed
         // TODO add your handling code here:
@@ -366,15 +376,23 @@ public class frmPerfil extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtPadecimientosActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // TODO add your handling code here:
-        isMod = false;
-        actualizarMod();
+        try {
+            // TODO add your handling code here:
+            isMod = false;
+            actualizarMod();
+            guardarDatos();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(frmPerfil.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(frmPerfil.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         // TODO add your handling code here:
         isMod = true;
         actualizarMod();
+                    
     }//GEN-LAST:event_btnModificarActionPerformed
 
 

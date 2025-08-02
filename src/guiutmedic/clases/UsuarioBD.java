@@ -88,6 +88,10 @@ public class UsuarioBD {
         stmt.setString(1, usuario);       //se establecen los campos de consulta
         stmt.setString(2, password);
         stmt.setString(3, matricula);
+        
+        System.out.println(sql);
+        System.out.println(usuario + password + matricula);
+        
         rs = stmt.executeQuery(); //se ejecuta la consulta y se recibe en el result set --> rs
 
         return rs;

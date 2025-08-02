@@ -21,7 +21,7 @@ public Connection conexionDataBase()throws ClassNotFoundException{
             Class.forName("com.mysql.cj.jdbc.Driver");
             //conn = DriverManager.getConnection("jdbc:mysql localhost
             conn = DriverManager.getConnection(url, user, password);
-            System.out.println("Conexión exitosa a la base de datos.");
+            System.out.println("Conexion exitosa a la base de datos.");
             } catch (SQLException e) {
             System.err.println("Error al conectar:" + e.getMessage());
             }

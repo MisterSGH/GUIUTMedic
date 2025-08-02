@@ -21,6 +21,9 @@ public class frmLoginUsuario extends javax.swing.JFrame {
     /**
      * Creates new form frmLoginUusario
      */
+    
+    int idUsuarioActual;
+    
     public frmLoginUsuario() {
         initComponents();
     }
@@ -164,33 +167,6 @@ public class frmLoginUsuario extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public boolean validarUsuario(Usuario objUsuario) {
-
-        //variables de clase 
-        boolean accesoPermitido = false;  //variable de retorno en caso de ser falso o verdadero
-        Connection conn;   // objeto de conexion
-        PreparedStatement stmt = null;   // variable para la sentencia sql
-        ResultSet rs = null;    //variable para resultado de consulta sql
-        //aqui se conectara a la base de datos y se buscara el usuario en la tabla de usuarios del sistema para su comparacion
-        try {
-            ConexionBD objetoConexionBD = new ConexionBD();
-            conn = objetoConexionBD.conexionDataBase();
-            UsuarioBD bd = new UsuarioBD();
-            rs = bd.consultarUsuarioLogin(conn, objUsuario.getUsuario(), objUsuario.getPassword(), objUsuario.getMatricula());
-            if (rs.next()) {  //encontro al menos 1 registro con los datos
-                //accedemos al sistema
-                accesoPermitido = true;
-            }
-            //se cierra la conexion
-            objetoConexionBD.cerrarConexion(conn);
-
-        } catch (HeadlessException | ClassNotFoundException | SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Error de conexión "
-                    + ex.getMessage());
-        }
-        //regresamos si el usuario se localizo
-        return accesoPermitido;
-    }
     
     private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
         // TODO add your handling code here:
@@ -224,7 +200,29 @@ public class frmLoginUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_jpasswordUsuarioMousePressed
 
     private void jButtonEntrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonEntrarMouseClicked
-        javax.swing.JOptionPane.showMessageDialog(this,"Bienvenido a utmedic");
+        // Este metodo captara los datos ingresados en txtUsuario y txtPassword
+        // para su validaion
+        // Aqui se programara la autenticacion del usuario
+        Usuario objUsuario = new Usuario();
+        objUsuario.setUsuario(txtUsuario.getText());
+        objUsuario.setPassword(new String(jpasswordUsuario.getPassword()));
+        objUsuario.setMatricula(txtUsuario1.getText());
+
+        //validando al usuario contra la base de datos
+        if (this.validarUsuario(objUsuario)) {
+            //si el usuario es valido
+            JOptionPane.showMessageDialog(this, "Bienvenido " + objUsuario.getUsuario());
+            // Se oculta esta ventana
+            this.setVisible(false);
+            //Se construye el objeto de la nueva ventana
+            frmMenuPrincipal menuPrincipal = new frmMenuPrincipal();
+            //se visualiza la pantalla del menu principal
+            menuPrincipal.setVisible(true);
+            menuPrincipal.setIdUsuarioActual(idUsuarioActual);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
+        }
     }//GEN-LAST:event_jButtonEntrarMouseClicked
 
     private void txtUsuario1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtUsuario1MousePressed
@@ -235,6 +233,37 @@ public class frmLoginUsuario extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtUsuario1ActionPerformed
 
+    public boolean validarUsuario(Usuario objUsuario) {
+
+        //variables de clase 
+        boolean accesoPermitido = false;  //variable de retorno en caso de ser falso o verdadero
+        Connection conn;   // objeto de conexion
+        PreparedStatement stmt = null;   // variable para la sentencia sql
+        ResultSet rs = null;    //variable para resultado de consulta sql
+        //aqui se conectara a la base de datos y se buscara el usuario en la tabla de usuarios del sistema para su comparacion
+        try {
+            ConexionBD objetoConexionBD = new ConexionBD();
+            conn = objetoConexionBD.conexionDataBase();
+            UsuarioBD bd = new UsuarioBD();
+            rs = bd.consultarUsuarioLogin(conn, objUsuario.getUsuario(), objUsuario.getPassword(), objUsuario.getMatricula());
+            if (rs.next()) {  //encontro al menos 1 registro con los datos
+                //accedemos al sistema
+                accesoPermitido = true;
+            }
+            
+            idUsuarioActual = rs.getInt(1);
+            
+            //se cierra la conexion
+            objetoConexionBD.cerrarConexion(conn);
+
+        } catch (HeadlessException | ClassNotFoundException | SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error de conexión "
+                    + ex.getMessage());
+        }
+        //regresamos si el usuario se localizo
+        return accesoPermitido;
+    }
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

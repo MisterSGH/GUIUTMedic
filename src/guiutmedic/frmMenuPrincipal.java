@@ -21,6 +21,16 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
      * Creates new form frmMenuPrincipal
      */
     
+    int idUsuarioActual;
+
+    public int getIdUsuarioActual() {
+        return idUsuarioActual;
+    }
+
+    public void setIdUsuarioActual(int idUsuarioActual) {
+        this.idUsuarioActual = idUsuarioActual;
+    }
+    
  public frmMenuPrincipal() {
        fondoPantallaMenu fondo = new fondoPantallaMenu();
     initComponents();
@@ -39,7 +49,8 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
         setIconImage(iconoApp.getImage());
     } catch (NullPointerException e) {
     System.err.println("No se pudo cargar el icono de la aplicación: " + e.getMessage());
-}
+    }
+     System.out.println("ID Usuario actual: "+idUsuarioActual);
     } 
 
 
@@ -70,7 +81,7 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
         );
         desktopPaneLayout.setVerticalGroup(
             desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 387, Short.MAX_VALUE)
+            .addGap(0, 388, Short.MAX_VALUE)
         );
 
         jMenuPerfil.setText("Perfil");
@@ -140,7 +151,7 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
 
     private void jMenuSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuSalirMouseClicked
         int opcion = JOptionPane.showConfirmDialog(this,
-        "¿Estás seguro de salir?",
+        "¿Estas seguro de salir?",
         "Confirmar salida de UTMEDIC",
         JOptionPane.YES_NO_OPTION,
         JOptionPane.QUESTION_MESSAGE);
@@ -152,9 +163,11 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
 
     private void jMenuPerfilMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuPerfilMouseClicked
      try {
-         frmPerfil ventanaPerfil = new frmPerfil();
+         frmPerfil ventanaPerfil = new frmPerfil(this);
          this.desktopPane.add(ventanaPerfil);
          ventanaPerfil.setVisible(true);
+         System.out.println("ID Usuario actual: "+idUsuarioActual);
+         ventanaPerfil.setIdUsuarioDeseado(idUsuarioActual);
      } catch (ClassNotFoundException ex) {
          Logger.getLogger(frmMenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
      }

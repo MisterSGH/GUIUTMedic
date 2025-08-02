@@ -18,26 +18,26 @@ public class Usuario {
     
     public Usuario(String matricula, String password, String usuario, String rol){
           this.idUsuario = 0;
-        this.matricula=matricula;
-        this.password =password;
         this.usuario = usuario;
+        this.password =password;
+        this.matricula=matricula;
         this.rol = rol;
     }
 
      public Usuario(){
-           this.idUsuario = 0;
-        this.matricula="";
-        this.password ="";
+        this.idUsuario = 0;
         this.usuario = "";
+        this.password ="";
+        this.matricula="";
         this.rol = "";
      }
     
     // Constructor
     public Usuario(int idUsuario, String matricula, String usuario, String password, String rol) {
         this.idUsuario = idUsuario;
-        this.matricula=matricula;
         this.usuario = usuario;
         this.password = password;
+        this.matricula=matricula;
         this.rol = rol;
     }
 
@@ -58,7 +58,7 @@ public class Usuario {
         this.password = password;
     }
 
-    public void setUsuario(String email) {
+    public void setUsuario(String usuario) {
         this.usuario = usuario;
     }
 

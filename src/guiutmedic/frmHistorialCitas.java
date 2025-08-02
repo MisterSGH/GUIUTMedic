@@ -4,6 +4,14 @@
  */
 package guiutmedic;
 
+import guiutmedic.clases.ConexionBD;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JOptionPane;
+
+
 /**
  *
  * @author santi
@@ -15,8 +23,45 @@ public class frmHistorialCitas extends javax.swing.JInternalFrame {
      */
     public frmHistorialCitas() {
         initComponents();
+         cargarHistorial();//CARGA LOS DATOS AL INICIAR
     }
 
+    
+    public void cargarHistorial() {
+    DefaultTableModel modeloTabla = (DefaultTableModel) tablaHistorial.getModel();
+    modeloTabla.setRowCount(0); // Limpia la tabla antes de cargar datos nuevos
+
+    try {
+        ConexionBD conexion = new ConexionBD(); // Crear instancia de la clase de conexión
+        Connection con = conexion.conexionDataBase(); // Obtener la conexión
+
+        String sql = "SELECT * FROM historial_citas";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Object[] fila = new Object[7];
+            fila[0] = rs.getInt("IdCita");
+            fila[1] = rs.getInt("IdPaciente");
+            fila[2] = rs.getInt("IdMedico");
+            fila[3] = rs.getString("Profesion");
+            fila[4] = rs.getDate("Fecha");
+            fila[5] = rs.getString("Hora");
+            fila[6] = rs.getString("MotivoConsulta");
+
+            modeloTabla.addRow(fila);
+        }
+
+        rs.close();
+        ps.close();
+        conexion.cerrarConexion(con);
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error al cargar historial: " + e.getMessage());
+    }
+}
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,13 +72,13 @@ public class frmHistorialCitas extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tablaHistorial = new javax.swing.JTable();
 
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tablaHistorial.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -46,7 +91,7 @@ public class frmHistorialCitas extends javax.swing.JInternalFrame {
                 "IdCita", "IdPaciente", "IdMedico", "Profesion", "Fecha", "Hora", "Motivo Consulta"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(tablaHistorial);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -65,6 +110,6 @@ public class frmHistorialCitas extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JTable tablaHistorial;
     // End of variables declaration//GEN-END:variables
 }
