@@ -9,7 +9,9 @@ public class Cita {
     private int idCita;
     private int idPerfil; // Requerido para conocer el cuadro completo del paciente
     private int idMedico;
+    private String profesion;
     private int idMotivo;
+    private String motivo;
     private String fecha;
     private String hora;
     private String observaciones;
@@ -27,6 +29,15 @@ public class Cita {
         this.hora = hora;
         this.observaciones = observaciones;
         this.estado = estado;
+    }
+    
+    // Constructor sin idCita, idMedico
+    public Cita(int idPerfil, String profesion, String motivo, String fecha, String hora) {
+        this.idPerfil = idPerfil;
+        this.profesion = profesion;
+        this.motivo = motivo;
+        this.fecha = fecha;
+        this.hora = hora;
     }
 
     // Constructor completo para leer/consultar
@@ -89,4 +100,22 @@ public class Cita {
     
     public void setEstado(String estado)
     { this.estado = estado; }
+
+    public String getProfesion() {
+        return profesion;
+    }
+
+    public void setProfesion(String profesion) {
+        this.profesion = profesion;
+    }
+
+    public String getMotivo() {
+        return motivo;
+    }
+
+    public void setMotivo(String motivo) {
+        this.motivo = motivo;
+    }
+    
+    
 }

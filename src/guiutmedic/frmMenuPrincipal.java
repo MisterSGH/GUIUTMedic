@@ -177,6 +177,7 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
         frmAgendar ventanaGUI = new frmAgendar();   
         this.desktopPane.add(ventanaGUI);
         ventanaGUI.setVisible(true);   
+        ventanaGUI.setIdUsuarioDeseado(idUsuarioActual);
     }//GEN-LAST:event_jMenuAgendarMouseClicked
 
     private void jMenuReagendarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuReagendarMouseClicked

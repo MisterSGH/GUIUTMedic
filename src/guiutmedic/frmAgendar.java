@@ -1,5 +1,24 @@
 package guiutmedic;
 
+import com.raven.event.EventTimePicker;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import com.toedter.calendar.JDateChooser;
+import guiutmedic.clases.Cita;
+import guiutmedic.clases.CitaBD;
+import guiutmedic.clases.ConexionBD;
+import guiutmedic.clases.PersonalSaludBD;
+import java.awt.Component;
+import java.awt.Container;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JButton;
+import javax.swing.SwingUtilities;
+
 /**
  *
  * @author santi
@@ -9,8 +28,65 @@ public class frmAgendar extends javax.swing.JInternalFrame {
     /**
      * Creates new form frmAgendar
      */
+    
+    ConexionBD objetoConexionBD = new ConexionBD();
+    Connection conn;
+    int idUsuarioDeseado;
+            
+
+    public int getIdUsuarioDeseado() {
+        return idUsuarioDeseado;
+    }
+
+    public void setIdUsuarioDeseado(int idUsuarioDeseado) {
+        this.idUsuarioDeseado = idUsuarioDeseado;
+    }
+    
+    
+    
     public frmAgendar() {
         initComponents();
+        quitarBotonesTimePicker();
+        
+        cboEspecialista.addItemListener(new ItemListener() {
+    public void itemStateChanged(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+            String seleccionado = cboEspecialista.getSelectedItem().toString();
+            cboMotivo.removeAllItems();
+            
+            switch (seleccionado) {
+                case "Médico":
+                    cboMotivo.addItem("Consulta general");
+                    cboMotivo.addItem("Síntomas gripales o fiebre");
+                    cboMotivo.addItem("Dolor muscular o de cabeza");
+                    cboMotivo.addItem("Lesión leve o accidente");
+                    cboMotivo.addItem("Control de signos vitales");
+                    cboMotivo.addItem("Malestar estomacal");
+                    // ...añadir más
+                    break;
+                case "Psicólogo":
+                    cboMotivo.addItem("Primera consulta psicológica");
+                    cboMotivo.addItem("Ansiedad o estrés académico");
+                    cboMotivo.addItem("Depresión");
+                    cboMotivo.addItem("Problemas personales");
+                    cboMotivo.addItem("Crisis emocional");
+                    cboMotivo.addItem("Dificultad para concentrarse");
+                    cboMotivo.addItem("Terapia breve individual");
+                    // ...añadir más
+                    break;
+                case "Nutricionista":
+                    cboMotivo.addItem("Primera consulta nutricional");
+                    cboMotivo.addItem("Plan de alimentación");
+                    cboMotivo.addItem("Control de peso");
+                    cboMotivo.addItem("Control de enfermedades crónicas");
+                    cboMotivo.addItem("Transtornos alimenticios");
+                    cboMotivo.addItem("Seguimiento nutricional");
+                    // ...añadir más
+                    break;
+            }
+        }
+    }
+});
     }
 
     /**
@@ -22,109 +98,316 @@ public class frmAgendar extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        btnAgendarCita = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        lblFecha = new javax.swing.JLabel();
+        cldFecha = new com.toedter.calendar.JCalendar();
+        txtFecha = new javax.swing.JTextField();
+        jPanel2 = new javax.swing.JPanel();
+        lblHora = new javax.swing.JLabel();
+        timePicker1 = new com.raven.swing.TimePicker();
+        txtHora = new javax.swing.JTextField();
+        jToggleButton1 = new javax.swing.JToggleButton();
+        jPanel3 = new javax.swing.JPanel();
+        lblMotivo = new javax.swing.JLabel();
+        lblEspecialista = new javax.swing.JLabel();
+        cboEspecialista = new javax.swing.JComboBox<>();
+        cboMotivo = new javax.swing.JComboBox<>();
 
         setClosable(true);
+        setTitle("Agendar cita");
 
-        jLabel1.setText("Especialista:");
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        btnAgendarCita.setText("Agendar Cita");
+        btnAgendarCita.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                btnAgendarCitaActionPerformed(evt);
             }
         });
 
-        jLabel2.setText("Hora:");
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Fecha"));
 
-        jLabel3.setText("Fecha:");
+        lblFecha.setText("Fecha:");
 
-        jLabel4.setText("Motivo:");
-
-        jButton1.setText("Agendar Cita");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+        cldFecha.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                cldFechaPropertyChange(evt);
             }
         });
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox2ActionPerformed(evt);
+        txtFecha.setText("-Fecha-");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(lblFecha)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(cldFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(cldFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblFecha))
+                .addContainerGap())
+        );
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Hora"));
+
+        lblHora.setText("Hora:");
+
+        timePicker1.set24hourMode(false);
+        timePicker1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                timePicker1MouseClicked(evt);
             }
         });
+        timePicker1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                timePicker1PropertyChange(evt);
+            }
+        });
+
+        txtHora.setText("-Fecha-");
+
+        jToggleButton1.setText("Guardar");
+        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblHora)
+                        .addGap(13, 13, 13)
+                        .addComponent(jToggleButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtHora, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(timePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(timePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblHora)
+                    .addComponent(txtHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jToggleButton1))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+
+        lblMotivo.setText("Motivo:");
+
+        lblEspecialista.setText("Especialista:");
+
+        cboEspecialista.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-Seleccionar-", "Médico", "Psicólogo", "Nutricionista" }));
+        cboEspecialista.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboEspecialistaActionPerformed(evt);
+            }
+        });
+
+        cboMotivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboMotivoActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(lblMotivo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(cboMotivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(lblEspecialista)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(cboEspecialista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(7, 7, 7)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblEspecialista)
+                    .addComponent(cboEspecialista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblMotivo)
+                    .addComponent(cboMotivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(67, 67, 67)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton1)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel4)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jLabel3)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel1)
-                            .addGap(18, 18, 18)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jLabel2)))
-                .addContainerGap(169, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnAgendarCita)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(25, 25, 25))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAgendarCita)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    
+    
+    
+    private void btnAgendarCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgendarCitaActionPerformed
+        try {
+            // TODO add your handling code here:
+            conn = objetoConexionBD.conexionDataBase();
+            String profesion = (String) cboEspecialista.getSelectedItem();
+            String motivo = (String) cboMotivo.getSelectedItem();
+            String fecha = txtFecha.getText();
+            String hora = txtHora.getText();
+            Cita cita = new Cita(idUsuarioDeseado, profesion, motivo, fecha, hora);
+            
+            CitaBD bd = new CitaBD();
+            bd.registrarCita(conn, cita);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(frmAgendar.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(frmAgendar.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnAgendarCitaActionPerformed
+
+    private void cboEspecialistaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboEspecialistaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_cboEspecialistaActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void cboMotivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboMotivoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_cboMotivoActionPerformed
 
-    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
+    private void cldFechaPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_cldFechaPropertyChange
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox2ActionPerformed
+        if (evt.getOldValue() != null) {
+            SimpleDateFormat ff = new SimpleDateFormat("dd/MM/yyyy");
+            txtFecha.setText(ff.format(cldFecha.getCalendar().getTime()));
+        }
+    }//GEN-LAST:event_cldFechaPropertyChange
 
+    private void timePicker1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_timePicker1PropertyChange
+        // TODO add your handling code here:
+        if (evt.getOldValue() != null) {
+            
+            Date hora = timePicker1.getSelectedDate();
+            System.out.println("hora: "+hora);
+            SimpleDateFormat formatoHora = new SimpleDateFormat("HH:mm");
+            String horaTexto = formatoHora.format(hora);
 
+            txtHora.setText(horaTexto);
+        }
+    }//GEN-LAST:event_timePicker1PropertyChange
+
+    public void addEventTimePicker(EventTimePicker event) {
+        
+    }
+    
+    private void timePicker1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_timePicker1MouseClicked
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_timePicker1MouseClicked
+
+    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+        // TODO add your handling code here:
+        Date hora = timePicker1.getSelectedDate();
+        System.out.println("hora: "+hora);
+        SimpleDateFormat formatoHora = new SimpleDateFormat("HH:mm");
+        String horaTexto = formatoHora.format(hora);
+        System.out.println("h: "+horaTexto);
+        txtHora.setText(horaTexto);
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
+
+public void quitarBotonesTimePicker() {
+    SwingUtilities.invokeLater(() -> {
+        // Busca el popup del timePicker1
+        for (Component comp : timePicker1.getComponents()) {
+            ocultarBotonesRecursivo(comp);
+        }
+    });
+}
+
+private void ocultarBotonesRecursivo(Component comp) {
+    if (comp instanceof JButton) {
+        JButton btn = (JButton) comp;
+        String texto = btn.getText().toLowerCase();
+        if (texto.contains("ok") || texto.contains("cancel")) {
+            btn.setVisible(false);
+        }
+    } else if (comp instanceof Container) {
+        for (Component hijo : ((Container) comp).getComponents()) {
+            ocultarBotonesRecursivo(hijo);
+        }
+    }
+}
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JButton btnAgendarCita;
+    private javax.swing.JComboBox<String> cboEspecialista;
+    private javax.swing.JComboBox<String> cboMotivo;
+    private com.toedter.calendar.JCalendar cldFecha;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JToggleButton jToggleButton1;
+    private javax.swing.JLabel lblEspecialista;
+    private javax.swing.JLabel lblFecha;
+    private javax.swing.JLabel lblHora;
+    private javax.swing.JLabel lblMotivo;
+    private com.raven.swing.TimePicker timePicker1;
+    private javax.swing.JTextField txtFecha;
+    private javax.swing.JTextField txtHora;
     // End of variables declaration//GEN-END:variables
 }
