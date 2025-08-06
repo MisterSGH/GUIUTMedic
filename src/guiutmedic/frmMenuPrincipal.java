@@ -182,11 +182,11 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
 
     private void jMenuReagendarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuReagendarMouseClicked
          
-        int idCita = 123; 
-    int idPerfil = 456;
-        frmReagendar ventanaGUI = new frmReagendar(idCita, idPerfil);
-    this.desktopPane.add(ventanaGUI);
-    ventanaGUI.setVisible(true);
+//        int idCita = 123; 
+//    int idPerfil = 456;
+//        frmReagendar ventanaGUI = new frmReagendar(idCita, idPerfil);
+//    this.desktopPane.add(ventanaGUI);
+//    ventanaGUI.setVisible(true);
         
     }//GEN-LAST:event_jMenuReagendarMouseClicked
 

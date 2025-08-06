@@ -138,6 +138,9 @@ public class PersonalSaludBD {
         return resultado;
     }
 
+    
+    
+    
     // Obtener lista completa de personal
     public List<PersonalSalud> obtenerTodosPersonal() {
         List<PersonalSalud> lista = new ArrayList<>();

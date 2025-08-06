@@ -14,17 +14,15 @@ public class CitaBD {
     
     
 public boolean registrarCita(Connection conn, Cita cita) throws SQLException {
-    String sql = "INSERT INTO cita (idPerfil, idMedico, profesion, idMotivo, motivo, fecha, hora, observaciones, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    String sql = "INSERT INTO cita (idPerfil, idPersonal, idMotivo, fecha, hora, observaciones, estado) VALUES (?, ?, ?, ?, ?, ?, ?)";
     try (PreparedStatement ps = conn.prepareStatement(sql)) {
         ps.setInt(1, cita.getIdPerfil());
         ps.setInt(2, cita.getIdMedico());
-        ps.setString(3, cita.getProfesion());
-        ps.setInt(4, cita.getIdMotivo());
-        ps.setString(5, cita.getMotivo());
-        ps.setString(6, cita.getFecha());
-        ps.setString(7, cita.getHora());
-        ps.setString(8, cita.getObservaciones());
-        ps.setString(9, cita.getEstado());
+        ps.setInt(3, cita.getIdMotivo());
+        ps.setString(4, cita.getFecha());
+        ps.setString(5, cita.getHora());
+        ps.setString(6, cita.getObservaciones());
+        ps.setString(7, cita.getEstado());
 
         int filas = ps.executeUpdate();
         return filas > 0;
