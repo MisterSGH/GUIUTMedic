@@ -1,6 +1,7 @@
 
 package guiutmedic;
 
+import guiutmedic.clases.Usuario;
 import guiutmedic.utilerias.fondoPantallaMenu;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -15,43 +16,46 @@ import javax.swing.JOptionPane;
  *
  * @author santi
  */
-public class frmMenuPrincipal extends javax.swing.JFrame {
 
+public class frmMenuPrincipal extends javax.swing.JFrame {
+  
+    
     /**
      * Creates new form frmMenuPrincipal
      */
     
-    int idUsuarioActual;
+   
+    /**
+     *
+     * @param objUsuario
+     */
 
-    public int getIdUsuarioActual() {
-        return idUsuarioActual;
-    }
+    private Usuario objetoMenuP; //variable del objeto local
 
-    public void setIdUsuarioActual(int idUsuarioActual) {
-        this.idUsuarioActual = idUsuarioActual;
-    }
-    
- public frmMenuPrincipal() {
-       fondoPantallaMenu fondo = new fondoPantallaMenu();
+    public frmMenuPrincipal(Usuario objUsuario) {
+    fondoPantallaMenu fondo = new fondoPantallaMenu();
+
+    this.objetoMenuP = objUsuario; 
+    System.out.println("Usuario recibido: " + objUsuario.getIdUsuario());
+
     initComponents();
-    // Maximiza la ventana al iniciar
-    setExtendedState(JFrame. MAXIMIZED_BOTH);
-    // Establece tamaño personalizado en función del ancho de la pantalla y una altura y ancho fijos
+    setExtendedState(JFrame.MAXIMIZED_BOTH);
+
     Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
     setSize(1160, 700);
-    // Asigna imagen de fondo al panel principal (desktopPane)
+
     if (desktopPane != null) {
-    desktopPane.setBorder(fondo); // Asegúrate de que fondo esté correctamente definido
+        desktopPane.setBorder(fondo);
     }
-    // Establece el icono de la aplicación si la imagen existe
+
     try {
-      ImageIcon iconoApp = new ImageIcon(getClass().getResource("/guiutmedic/imagenes/icono.jpeg"));
+        ImageIcon iconoApp = new ImageIcon(getClass().getResource("/guiutmedic/imagenes/icono.jpeg"));
         setIconImage(iconoApp.getImage());
     } catch (NullPointerException e) {
-    System.err.println("No se pudo cargar el icono de la aplicación: " + e.getMessage());
+        System.err.println("No se pudo cargar el icono de la aplicación: " + e.getMessage());
     }
-     System.out.println("ID Usuario actual: "+idUsuarioActual);
-    } 
+}
+
 
 
     /**
@@ -88,11 +92,6 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
         jMenuPerfil.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jMenuPerfilMouseClicked(evt);
-            }
-        });
-        jMenuPerfil.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuPerfilActionPerformed(evt);
             }
         });
         JmenuBar.add(jMenuPerfil);
@@ -145,10 +144,6 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuPerfilActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuPerfilActionPerformed
-
     private void jMenuSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuSalirMouseClicked
         int opcion = JOptionPane.showConfirmDialog(this,
         "¿Estas seguro de salir?",
@@ -162,22 +157,21 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuSalirMouseClicked
 
     private void jMenuPerfilMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuPerfilMouseClicked
-     try {
-         frmPerfil ventanaPerfil = new frmPerfil(this);
-         this.desktopPane.add(ventanaPerfil);
-         ventanaPerfil.setVisible(true);
-         System.out.println("ID Usuario actual: "+idUsuarioActual);
-         ventanaPerfil.setIdUsuarioDeseado(idUsuarioActual);
-     } catch (ClassNotFoundException ex) {
-         Logger.getLogger(frmMenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-     }
+        try {
+            frmPerfil ventanaPerfil = new frmPerfil(objetoMenuP);
+            this.desktopPane.add(ventanaPerfil);
+            ventanaPerfil.setVisible(true);
+            System.out.println("ID Usuario actual: "+this.objetoMenuP.getIdUsuario());
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(frmMenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuPerfilMouseClicked
 
     private void jMenuAgendarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuAgendarMouseClicked
         frmAgendar ventanaGUI = new frmAgendar();   
         this.desktopPane.add(ventanaGUI);
         ventanaGUI.setVisible(true);   
-        ventanaGUI.setIdUsuarioDeseado(idUsuarioActual);
+//        ventanaGUI.setIdUsuarioDeseado(idUsuarioActual);
     }//GEN-LAST:event_jMenuAgendarMouseClicked
 
     private void jMenuReagendarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuReagendarMouseClicked
@@ -222,7 +216,7 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmMenuPrincipal().setVisible(true);
+                new frmMenuPrincipal(null).setVisible(true);
             }
         });
     }
