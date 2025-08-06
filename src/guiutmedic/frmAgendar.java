@@ -64,29 +64,29 @@ public class frmAgendar extends javax.swing.JInternalFrame {
             if (seleccionado.contains("Médico")) {
                 
                 cboMotivo.addItem("1 - Consulta general");
-                cboMotivo.addItem("Síntomas gripales o fiebre");
-                cboMotivo.addItem("Dolor muscular o de cabeza");
-                cboMotivo.addItem("Lesión leve o accidente");
-                cboMotivo.addItem("Control de signos vitales");
-                cboMotivo.addItem("Malestar estomacal");
+                cboMotivo.addItem("2 - Síntomas gripales o fiebre");
+                cboMotivo.addItem("3 - Dolor muscular o de cabeza");
+                cboMotivo.addItem("4 - Lesión leve o accidente");
+                cboMotivo.addItem("5 - Control de signos vitales");
+                cboMotivo.addItem("6 - Malestar estomacal");
                 // ...añadir más
             } else if (seleccionado.contains("Psicólogo")) {
-                    cboMotivo.addItem("Primera consulta psicológica");
-                    cboMotivo.addItem("Ansiedad o estrés académico");
-                    cboMotivo.addItem("Depresión");
-                    cboMotivo.addItem("Problemas personales");
-                    cboMotivo.addItem("Crisis emocional");
-                    cboMotivo.addItem("Dificultad para concentrarse");
-                    cboMotivo.addItem("Terapia breve individual");
-                    // ...añadir más
+                cboMotivo.addItem("7 - Primera consulta psicológica");
+                cboMotivo.addItem("8 - Ansiedad o estrés académico");
+                cboMotivo.addItem("9 - Depresión");
+                cboMotivo.addItem("10 - Problemas personales");
+                cboMotivo.addItem("11 - Crisis emocional");
+                cboMotivo.addItem("12 - Dificultad para concentrarse");
+                cboMotivo.addItem("13 - Terapia breve individual");
+                // ...añadir más
             } else if (seleccionado.contains("Nutricionista")) {
-                    cboMotivo.addItem("Primera consulta nutricional");
-                    cboMotivo.addItem("Plan de alimentación");
-                    cboMotivo.addItem("Control de peso");
-                    cboMotivo.addItem("Control de enfermedades crónicas");
-                    cboMotivo.addItem("Transtornos alimenticios");
-                    cboMotivo.addItem("Seguimiento nutricional");
-                    // ...añadir más
+                cboMotivo.addItem("14 - Primera consulta nutricional");
+                cboMotivo.addItem("15 - Plan de alimentación");
+                cboMotivo.addItem("16 - Control de peso");
+                cboMotivo.addItem("17 - Control de enfermedades crónicas");
+                cboMotivo.addItem("18 - Trastornos alimenticios");
+                cboMotivo.addItem("19 - Seguimiento nutricional");
+                // ...añadir más
             }
         }
     }
