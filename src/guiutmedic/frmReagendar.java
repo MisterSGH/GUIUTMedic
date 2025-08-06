@@ -1,22 +1,35 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
- */
 package guiutmedic;
 
-/**
- *
- * @author santi
- */
+import guiutmedic.clases.ConexionBD;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.JOptionPane;
+
 public class frmReagendar extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form frmReagendar
-     */
-    public frmReagendar() {
-        initComponents();
-    }
+    private final int idCita;
+    private final int idPerfil;
+    private final ConexionBD conexionBD;
 
+    public frmReagendar(int idCita, int idPerfil) {
+        initComponents();
+        this.idCita = idCita;
+        this.idPerfil = idPerfil;
+        this.conexionBD = new ConexionBD();
+        
+        if (timePicker1 != null) {
+            try {
+                timePicker1.setText("09:00");
+            } catch (Exception e) {
+               
+            }
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -26,48 +39,54 @@ public class frmReagendar extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jLabel1 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        cmbProfesionales = new javax.swing.JComboBox<>();
+        lblHora = new javax.swing.JLabel();
+        lblFecha = new javax.swing.JLabel();
+        lblMotivo = new javax.swing.JLabel();
+        btnReagendar = new javax.swing.JButton();
+        cbmMotivo = new javax.swing.JComboBox<>();
+        lblCita = new javax.swing.JLabel();
+        btnCancelar = new javax.swing.JButton();
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        timePicker1 = new com.github.lgooddatepicker.components.TimePicker();
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        setClosable(true);
+        setMaximizable(true);
+        setResizable(true);
+
+        cmbProfesionales.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Medico", "Psicologo", "Nutricionista" }));
+        cmbProfesionales.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                cmbProfesionalesActionPerformed(evt);
             }
         });
 
-        jLabel2.setText("Hora:");
+        lblHora.setText("Hora:");
 
-        jLabel3.setText("Fecha:");
+        lblFecha.setText("Fecha:");
 
-        jLabel4.setText("Motivo:");
+        lblMotivo.setText("Motivo:");
 
-        jButton1.setText("Reagendar Cita");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnReagendar.setText("Reagendar Cita");
+        btnReagendar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnReagendarActionPerformed(evt);
             }
         });
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
+        cbmMotivo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Situacion Personal", "Horario Ocupado", "Otro" }));
+        cbmMotivo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox2ActionPerformed(evt);
+                cbmMotivoActionPerformed(evt);
             }
         });
 
-        jLabel1.setText("Elige la Cita:");
+        lblCita.setText("Elige la Cita:");
 
-        jButton2.setText("Cancelar Cita");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnCancelar.setText("Cancelar Cita");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnCancelarActionPerformed(evt);
             }
         });
 
@@ -76,77 +95,184 @@ public class frmReagendar extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(67, 67, 67)
+                .addGap(63, 63, 63)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
-                        .addComponent(jButton2)
+                        .addComponent(lblFecha)
+                        .addGap(12, 12, 12)
+                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnReagendar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                        .addComponent(btnCancelar)
                         .addGap(50, 50, 50))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel3)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(18, 18, 18)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel2))
+                                .addComponent(lblCita)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbProfesionales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblHora)
+                                    .addComponent(lblMotivo))
+                                .addGap(12, 12, 12)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cbmMotivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(timePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(16, 16, 16)
+                .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblCita)
+                    .addComponent(cmbProfesionales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblFecha))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblHora)
+                    .addComponent(timePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2)
-                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblMotivo)
+                    .addComponent(cbmMotivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(btnReagendar)
+                    .addComponent(btnCancelar))
                 .addGap(22, 22, 22))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void cmbProfesionalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbProfesionalesActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_cmbProfesionalesActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnReagendarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReagendarActionPerformed
+     if (jDateChooser1.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "Seleccione una fecha valida");
+            return;
+        }
 
-    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox2ActionPerformed
+        String nuevoProfesional = (String) cmbProfesionales.getSelectedItem();
+        String nuevoMotivo = (String) cbmMotivo.getSelectedItem();
+        String nuevaFecha = new java.sql.Date(jDateChooser1.getDate().getTime()).toString();
+        
+      
+        String nuevaHora = obtenerHoraFormateada();
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        if (nuevoProfesional == null || nuevoMotivo == null || nuevaHora.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Complete todos los campos");
+            return;
+        }
+
+        if (reagendarCita(nuevoProfesional, nuevoMotivo, nuevaFecha, nuevaHora)) {
+            JOptionPane.showMessageDialog(this, "Cita reagendada con exito");
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al reagendar la cita");
+        }
+    }
+
+    private String obtenerHoraFormateada() {
+        try {
+            return timePicker1.getText().trim();
+        } catch (Exception e) {
+            return "09:00"; 
+        }
+    }
+
+    private boolean reagendarCita(String profesional, String motivo, String fecha, String hora) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        try {
+            conn = conexionBD.conexionDataBase();
+            if (conn == null) {
+                JOptionPane.showMessageDialog(this, "Error de conexión a la base de datos");
+                return false;
+            }
+            
+            String checkSql = "SELECT COUNT(*) FROM cita WHERE fecha = ? AND hora = ?";
+            ps = conn.prepareStatement(checkSql);
+            ps.setString(1, fecha);
+            ps.setString(2, hora);
+            rs = ps.executeQuery();
+            
+            if (rs.next() && rs.getInt(1) > 0) {
+                JOptionPane.showMessageDialog(this, "El horario no esta disponible");
+                return false;
+            }
+            
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+            
+            String updateSql = "UPDATE cita SET "
+                    + "profesion = ?, "
+                    + "motivo = ?, "
+                    + "fecha = ?, "
+                    + "hora = ?, "
+                    + "estado = 'Reagendada' "
+                    + "WHERE idCita = ? AND idPerfil = ?";
+            
+            ps = conn.prepareStatement(updateSql);
+            ps.setString(1, profesional);
+            ps.setString(2, motivo);
+            ps.setString(3, fecha);
+            ps.setString(4, hora);
+            ps.setInt(5, idCita);
+            ps.setInt(6, idPerfil);
+            
+            int filasActualizadas = ps.executeUpdate();
+            return filasActualizadas > 0;
+            
+        } catch (Exception ex) { 
+            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+            ex.printStackTrace();
+            return false;
+        } finally {
+           
+            try {
+                if (rs != null) rs.close();
+            } catch (SQLException e) {}
+            
+            try {
+                if (ps != null) ps.close();
+            } catch (SQLException e) {}
+            
+         
+    }
+
+    }//GEN-LAST:event_btnReagendarActionPerformed
+
+    private void cbmMotivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbmMotivoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_cbmMotivoActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+       
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnReagendar;
+    private javax.swing.JComboBox<String> cbmMotivo;
+    private javax.swing.JComboBox<String> cmbProfesionales;
+    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private javax.swing.JLabel lblCita;
+    private javax.swing.JLabel lblFecha;
+    private javax.swing.JLabel lblHora;
+    private javax.swing.JLabel lblMotivo;
+    private com.github.lgooddatepicker.components.TimePicker timePicker1;
     // End of variables declaration//GEN-END:variables
 }

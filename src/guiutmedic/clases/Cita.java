@@ -31,14 +31,14 @@ public class Cita {
         this.estado = estado;
     }
     
-    // Constructor sin idCita, idMedico
-    public Cita(int idPerfil, String profesion, String motivo, String fecha, String hora) {
-        this.idPerfil = idPerfil;
-        this.profesion = profesion;
-        this.motivo = motivo;
-        this.fecha = fecha;
-        this.hora = hora;
-    }
+//    // Constructor sin idCita, idMedico
+//    public Cita(int idPerfil, String profesion, String motivo, String fecha, String hora) {
+//        this.idPerfil = idPerfil;
+//        this.profesion = profesion;
+//        this.motivo = motivo;
+//        this.fecha = fecha;
+//        this.hora = hora;
+//    }
 
     // Constructor completo para leer/consultar
     public Cita(int idCita, int idPerfil, int idMedico, int idMotivo, String fecha, String hora, String observaciones, String estado) {

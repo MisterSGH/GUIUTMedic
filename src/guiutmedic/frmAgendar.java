@@ -7,6 +7,7 @@ import com.toedter.calendar.JDateChooser;
 import guiutmedic.clases.Cita;
 import guiutmedic.clases.CitaBD;
 import guiutmedic.clases.ConexionBD;
+import guiutmedic.clases.PersonalSalud;
 import guiutmedic.clases.PersonalSaludBD;
 import java.awt.Component;
 import java.awt.Container;
@@ -14,9 +15,11 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 /**
@@ -32,6 +35,8 @@ public class frmAgendar extends javax.swing.JInternalFrame {
     ConexionBD objetoConexionBD = new ConexionBD();
     Connection conn;
     int idUsuarioDeseado;
+    PersonalSaludBD bd = new PersonalSaludBD();
+    List<PersonalSalud> lista = bd.obtenerTodosPersonal();
             
 
     public int getIdUsuarioDeseado() {
@@ -47,6 +52,8 @@ public class frmAgendar extends javax.swing.JInternalFrame {
     public frmAgendar() {
         initComponents();
         quitarBotonesTimePicker();
+        llenarEspecialista();
+        
         
         cboEspecialista.addItemListener(new ItemListener() {
     public void itemStateChanged(ItemEvent e) {
@@ -54,39 +61,37 @@ public class frmAgendar extends javax.swing.JInternalFrame {
             String seleccionado = cboEspecialista.getSelectedItem().toString();
             cboMotivo.removeAllItems();
             
-            switch (seleccionado) {
-                case "Médico":
-                    cboMotivo.addItem("Consulta general");
-                    cboMotivo.addItem("Síntomas gripales o fiebre");
-                    cboMotivo.addItem("Dolor muscular o de cabeza");
-                    cboMotivo.addItem("Lesión leve o accidente");
-                    cboMotivo.addItem("Control de signos vitales");
-                    cboMotivo.addItem("Malestar estomacal");
-                    // ...añadir más
-                    break;
-                case "Psicólogo":
-                    cboMotivo.addItem("Primera consulta psicológica");
-                    cboMotivo.addItem("Ansiedad o estrés académico");
-                    cboMotivo.addItem("Depresión");
-                    cboMotivo.addItem("Problemas personales");
-                    cboMotivo.addItem("Crisis emocional");
-                    cboMotivo.addItem("Dificultad para concentrarse");
-                    cboMotivo.addItem("Terapia breve individual");
-                    // ...añadir más
-                    break;
-                case "Nutricionista":
-                    cboMotivo.addItem("Primera consulta nutricional");
-                    cboMotivo.addItem("Plan de alimentación");
-                    cboMotivo.addItem("Control de peso");
-                    cboMotivo.addItem("Control de enfermedades crónicas");
-                    cboMotivo.addItem("Transtornos alimenticios");
-                    cboMotivo.addItem("Seguimiento nutricional");
-                    // ...añadir más
-                    break;
+            if (seleccionado.contains("Médico")) {
+                
+                cboMotivo.addItem("1 - Consulta general");
+                cboMotivo.addItem("2 - Síntomas gripales o fiebre");
+                cboMotivo.addItem("3 - Dolor muscular o de cabeza");
+                cboMotivo.addItem("4 - Lesión leve o accidente");
+                cboMotivo.addItem("5 - Control de signos vitales");
+                cboMotivo.addItem("6 - Malestar estomacal");
+                // ...añadir más
+            } else if (seleccionado.contains("Psicólogo")) {
+                cboMotivo.addItem("7 - Primera consulta psicológica");
+                cboMotivo.addItem("8 - Ansiedad o estrés académico");
+                cboMotivo.addItem("9 - Depresión");
+                cboMotivo.addItem("10 - Problemas personales");
+                cboMotivo.addItem("11 - Crisis emocional");
+                cboMotivo.addItem("12 - Dificultad para concentrarse");
+                cboMotivo.addItem("13 - Terapia breve individual");
+                // ...añadir más
+            } else if (seleccionado.contains("Nutricionista")) {
+                cboMotivo.addItem("14 - Primera consulta nutricional");
+                cboMotivo.addItem("15 - Plan de alimentación");
+                cboMotivo.addItem("16 - Control de peso");
+                cboMotivo.addItem("17 - Control de enfermedades crónicas");
+                cboMotivo.addItem("18 - Trastornos alimenticios");
+                cboMotivo.addItem("19 - Seguimiento nutricional");
+                // ...añadir más
             }
         }
     }
 });
+        
     }
 
     /**
@@ -224,13 +229,14 @@ public class frmAgendar extends javax.swing.JInternalFrame {
 
         lblEspecialista.setText("Especialista:");
 
-        cboEspecialista.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-Seleccionar-", "Médico", "Psicólogo", "Nutricionista" }));
+        cboEspecialista.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-Seleccionar-" }));
         cboEspecialista.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboEspecialistaActionPerformed(evt);
             }
         });
 
+        cboMotivo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-Seleccionar-" }));
         cboMotivo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboMotivoActionPerformed(evt);
@@ -299,22 +305,36 @@ public class frmAgendar extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+        
 
     
-    
+    private void llenarEspecialista() {
+
+        System.out.println("Tamaño de la lista: " + lista.size());
+
+        for (PersonalSalud p : lista) {
+            System.out.println("Nombre: " + p.getNombre() + ", Profesión: " + p.getProfesion());
+            cboEspecialista.addItem(p.getIdPersonal()+" - "+p.getNombre() + " - " + p.getProfesion());
+        }
+}
     
     private void btnAgendarCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgendarCitaActionPerformed
         try {
             // TODO add your handling code here:
             conn = objetoConexionBD.conexionDataBase();
-            String profesion = (String) cboEspecialista.getSelectedItem();
-            String motivo = (String) cboMotivo.getSelectedItem();
             String fecha = txtFecha.getText();
             String hora = txtHora.getText();
-            Cita cita = new Cita(idUsuarioDeseado, profesion, motivo, fecha, hora);
+            String[] partesE = cboEspecialista.getSelectedItem().toString().split(" - ");
+            int numeroE = Integer.parseInt(partesE[0]);
+            System.out.println(numeroE);
+            String[] partesM = cboMotivo.getSelectedItem().toString().split(" - ");
+            int numeroM = Integer.parseInt(partesM[0]);
+            System.out.println(numeroM);
+            Cita cita = new Cita(idUsuarioDeseado, numeroE, numeroM, fecha, hora, "", "");
             
             CitaBD bd = new CitaBD();
             bd.registrarCita(conn, cita);
+            JOptionPane.showMessageDialog(this, "Cita agendada correctamente.");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(frmAgendar.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
