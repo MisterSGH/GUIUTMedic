@@ -5,14 +5,17 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import com.toedter.calendar.JDateChooser;
 import guiutmedic.clases.Cita;
+import guiutmedic.clases.PerfilDB;
 import guiutmedic.clases.CitaBD;
 import guiutmedic.clases.ConexionBD;
 import guiutmedic.clases.PersonalSalud;
 import guiutmedic.clases.PersonalSaludBD;
+import guiutmedic.clases.Usuario;
 import java.awt.Component;
 import java.awt.Container;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +24,7 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+
 
 /**
  *
@@ -34,23 +38,19 @@ public class frmAgendar extends javax.swing.JInternalFrame {
     
     ConexionBD objetoConexionBD = new ConexionBD();
     Connection conn;
-    int idUsuarioDeseado;
+
     PersonalSaludBD bd = new PersonalSaludBD();
     List<PersonalSalud> lista = bd.obtenerTodosPersonal();
             
-
-    public int getIdUsuarioDeseado() {
-        return idUsuarioDeseado;
-    }
-
-    public void setIdUsuarioDeseado(int idUsuarioDeseado) {
-        this.idUsuarioDeseado = idUsuarioDeseado;
-    }
+    String fechaMSQL="//";
+   
     
     
-    
-    public frmAgendar() {
+    private Usuario objetoMenuP; //variable del objeto local
+    public frmAgendar(Usuario objUsuario) throws ClassNotFoundException{
         initComponents();
+        this.objetoMenuP = objUsuario;
+
         quitarBotonesTimePicker();
         llenarEspecialista();
         
@@ -94,6 +94,7 @@ public class frmAgendar extends javax.swing.JInternalFrame {
         
     }
 
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -172,6 +173,7 @@ public class frmAgendar extends javax.swing.JInternalFrame {
 
         lblHora.setText("Hora:");
 
+        timePicker1.setForeground(new java.awt.Color(0, 153, 204));
         timePicker1.set24hourMode(false);
         timePicker1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -281,9 +283,11 @@ public class frmAgendar extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnAgendarCita)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(61, 61, 61)
+                        .addComponent(btnAgendarCita)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -298,7 +302,7 @@ public class frmAgendar extends javax.swing.JInternalFrame {
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(27, 27, 27)
                         .addComponent(btnAgendarCita)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -319,10 +323,21 @@ public class frmAgendar extends javax.swing.JInternalFrame {
 }
     
     private void btnAgendarCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgendarCitaActionPerformed
+        
         try {
-            // TODO add your handling code here:
+            
             conn = objetoConexionBD.conexionDataBase();
-            String fecha = txtFecha.getText();
+            String fechaInput = txtFecha.getText(); // ej: "15/08/2025"
+            SimpleDateFormat formatoEntrada = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat formatoMySQL = new SimpleDateFormat("yyyy-MM-dd");
+
+                Date fecha = formatoEntrada.parse(fechaInput); // convierte String a Date
+                String fechaMySQL = formatoMySQL.format(fecha); // convierte Date a String en formato MySQL
+                
+            PerfilDB perfilDB = new PerfilDB();
+            int idPerfil = perfilDB.obtenerIdPerfilPorIdUsuario(conn, objetoMenuP.getIdUsuario()); //,etodo para obtener el idperfil del idusuario
+
+            fechaMSQL=fechaMySQL;
             String hora = txtHora.getText();
             String[] partesE = cboEspecialista.getSelectedItem().toString().split(" - ");
             int numeroE = Integer.parseInt(partesE[0]);
@@ -330,15 +345,24 @@ public class frmAgendar extends javax.swing.JInternalFrame {
             String[] partesM = cboMotivo.getSelectedItem().toString().split(" - ");
             int numeroM = Integer.parseInt(partesM[0]);
             System.out.println(numeroM);
-            Cita cita = new Cita(idUsuarioDeseado, numeroE, numeroM, fecha, hora, "", "");
+                        
+            Cita cita = new Cita(idPerfil, numeroE, numeroM, fechaMSQL, hora, "", ""); //constructor de la cita
             
             CitaBD bd = new CitaBD();
-            bd.registrarCita(conn, cita);
-            JOptionPane.showMessageDialog(this, "Cita agendada correctamente.");
+            boolean exito = bd.registrarCita(conn, cita);
+            if (exito) {
+                JOptionPane.showMessageDialog(this, "Cita agendada correctamente.");
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo agendar la cita. Verifica los datos.");
+                }
+
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(frmAgendar.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(frmAgendar.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(frmAgendar.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Formato de fecha inválido. Use dd/MM/yyyy");
         }
     }//GEN-LAST:event_btnAgendarCitaActionPerformed
 
@@ -352,9 +376,12 @@ public class frmAgendar extends javax.swing.JInternalFrame {
 
     private void cldFechaPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_cldFechaPropertyChange
         // TODO add your handling code here:
+        
         if (evt.getOldValue() != null) {
             SimpleDateFormat ff = new SimpleDateFormat("dd/MM/yyyy");
             txtFecha.setText(ff.format(cldFecha.getCalendar().getTime()));
+             SimpleDateFormat fSQL = new SimpleDateFormat("yyyy/MM/dd");
+            fechaMSQL=fSQL.format(cldFecha.getCalendar().getTime());
         }
     }//GEN-LAST:event_cldFechaPropertyChange
 

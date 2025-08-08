@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package guiutmedic.clases;
 
 import java.sql.Connection;
@@ -79,22 +76,19 @@ public class UsuarioBD {
         }
     }
     
+    public ResultSet consultarUsuarioLogin(Connection conn, String usuario, String password) throws SQLException {
+        String sql = "SELECT idUsuario, usuario, password, rol, matricula FROM usuario WHERE usuario = ? AND password = ?";
+    PreparedStatement stmt = conn.prepareStatement(sql);
+    stmt.setString(1, usuario);
+    stmt.setString(2, password);
 
-    public ResultSet consultarUsuarioLogin(Connection conn, String usuario, String password, String matricula) throws SQLException {
-        ResultSet rs;
-        PreparedStatement stmt;
-        String sql = "SELECT *  from usuario WHERE usuario = ? AND password = ? AND matricula = ?";   //se arma la sentencia de la consulta
-        stmt = conn.prepareStatement(sql);//se prepara la sentencia SQL mediante la variable statement--> stmt
-        stmt.setString(1, usuario);       //se establecen los campos de consulta
-        stmt.setString(2, password);
-        stmt.setString(3, matricula);
-        
-        System.out.println(sql);
-        System.out.println(usuario + password + matricula);
-        
-        rs = stmt.executeQuery(); //se ejecuta la consulta y se recibe en el result set --> rs
+    System.out.println(sql);
+    System.out.println(usuario + password);
 
-        return rs;
-    }
+    ResultSet rs = stmt.executeQuery();
+    return rs;
+}
+
+    
 
 }

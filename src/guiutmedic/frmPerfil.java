@@ -1,30 +1,31 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
- */
+
 package guiutmedic;
 
 import guiutmedic.clases.ConexionBD;
-import guiutmedic.frmMenuPrincipal;
+import guiutmedic.clases.Usuario;
+import java.awt.Image;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import java.io.File;
+import javax.swing.ImageIcon;
 
 /**
  *
  * @author santi
  */
 public class frmPerfil extends javax.swing.JInternalFrame {
-
+    String ruta="";
     /**
      * Creates new form frmPerfil
      */
-    
+     private JFileChooser fileChooser;
     boolean isMod = false;
     
     ConexionBD objetoConexionBD = new ConexionBD();
@@ -34,20 +35,49 @@ public class frmPerfil extends javax.swing.JInternalFrame {
     String datoBuscar = "";
     String dato = "";
     private frmMenuPrincipal menuPadre;
-    int idUsuarioDeseado;
+    String idUsuarioDeseado;
 
-    public int getIdUsuarioDeseado() {
+    public String getIdUsuarioDeseado() {
         return idUsuarioDeseado;
     }
 
-    public void setIdUsuarioDeseado(int idUsuarioDeseado) {
+    public void setIdUsuarioDeseado(String idUsuarioDeseado) {
         this.idUsuarioDeseado = idUsuarioDeseado;
     }
     
-    public frmPerfil(frmMenuPrincipal menuPadre) throws ClassNotFoundException {
+    /**
+     *
+     * @param menuPadre
+     * @param idusuario
+     * @throws ClassNotFoundException
+     */
+    private Usuario objetoMenuP; //variable del objeto local
+    public frmPerfil(Usuario objUsuario) throws ClassNotFoundException {
         initComponents();
+        this.objetoMenuP = objUsuario;
         this.menuPadre = menuPadre;
-        idUsuarioDeseado = menuPadre.getIdUsuarioActual();
+        this.idUsuarioDeseado = String.valueOf(objUsuario.getIdUsuario());
+        this.txtIdUsuario.setText(idUsuarioDeseado);
+        System.out.println("frmPerfil recibe idUsuario: " + objUsuario.getIdUsuario());
+        
+        
+        fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Seleccionar Imagen");
+        fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+            public boolean accept(File f) {
+                return f.isDirectory() || f.getName().toLowerCase().endsWith(".jpg")
+                        || f.getName().toLowerCase().endsWith(".jpeg")
+                        || f.getName().toLowerCase().endsWith(".png");
+            }
+
+            public String getDescription() {
+                return "Archivos de Imagen (JPG, JPEG, PNG)";
+            }
+        });
+
+        
+        
+
         llenarDatos();
         
         actualizarMod();
@@ -62,55 +92,66 @@ public class frmPerfil extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabelIDUsuario = new javax.swing.JLabel();
-        txtIdUsuario = new javax.swing.JTextField();
-        lblNombre = new javax.swing.JLabel();
-        txtNombre = new javax.swing.JTextField();
-        lblMatricula = new javax.swing.JLabel();
-        txtMatricula = new javax.swing.JTextField();
+        jPanel1 = new javax.swing.JPanel();
+        btnModificar = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
         lblTelefono = new javax.swing.JLabel();
         txtTelefono = new javax.swing.JTextField();
         lblContacto = new javax.swing.JLabel();
         txtContacto = new javax.swing.JTextField();
         lblAlergias = new javax.swing.JLabel();
+        jLabelIDUsuario = new javax.swing.JLabel();
         txtAlergias = new javax.swing.JTextField();
+        txtIdUsuario = new javax.swing.JTextField();
         jLabelIDUsuario6 = new javax.swing.JLabel();
+        lblNombre = new javax.swing.JLabel();
         txtPadecimientos = new javax.swing.JTextField();
-        btnModificar = new javax.swing.JButton();
-        btnGuardar = new javax.swing.JButton();
+        txtNombre = new javax.swing.JTextField();
+        lblMatricula = new javax.swing.JLabel();
+        txtMatricula = new javax.swing.JTextField();
+        imageLabel = new javax.swing.JLabel();
+        uploadButton = new javax.swing.JButton();
 
         setClosable(true);
         setTitle("Ventana de Perfil");
 
-        jLabelIDUsuario.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
-        jLabelIDUsuario.setText("IdUsuario:");
-
-        txtIdUsuario.setEditable(false);
-        txtIdUsuario.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        txtIdUsuario.addActionListener(new java.awt.event.ActionListener() {
+        btnModificar.setBackground(new java.awt.Color(255, 102, 102));
+        btnModificar.setText("Modificar");
+        btnModificar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtIdUsuarioActionPerformed(evt);
+                btnModificarActionPerformed(evt);
             }
         });
 
-        lblNombre.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
-        lblNombre.setText("Nombre:");
-
-        txtNombre.addActionListener(new java.awt.event.ActionListener() {
+        btnGuardar.setBackground(new java.awt.Color(0, 204, 102));
+        btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNombreActionPerformed(evt);
+                btnGuardarActionPerformed(evt);
             }
         });
 
-        lblMatricula.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
-        lblMatricula.setText("Matricula:");
-
-        txtMatricula.setEditable(false);
-        txtMatricula.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtMatriculaActionPerformed(evt);
-            }
-        });
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnModificar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(15, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnModificar)
+                    .addComponent(btnGuardar)))
+        );
 
         lblTelefono.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         lblTelefono.setText("Telefono:");
@@ -133,14 +174,28 @@ public class frmPerfil extends javax.swing.JInternalFrame {
         lblAlergias.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         lblAlergias.setText("Alergias:");
 
+        jLabelIDUsuario.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        jLabelIDUsuario.setText("IdUsuario:");
+
         txtAlergias.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtAlergiasActionPerformed(evt);
             }
         });
 
+        txtIdUsuario.setEditable(false);
+        txtIdUsuario.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        txtIdUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIdUsuarioActionPerformed(evt);
+            }
+        });
+
         jLabelIDUsuario6.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         jLabelIDUsuario6.setText("Padecimientos:");
+
+        lblNombre.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        lblNombre.setText("Nombre:");
 
         txtPadecimientos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -148,18 +203,105 @@ public class frmPerfil extends javax.swing.JInternalFrame {
             }
         });
 
-        btnModificar.setText("Modificar");
-        btnModificar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+        txtNombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnModificarActionPerformed(evt);
+                txtNombreActionPerformed(evt);
             }
         });
 
-        btnGuardar.setText("Guardar");
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+        lblMatricula.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        lblMatricula.setText("Matricula:");
+
+        txtMatricula.setEditable(false);
+        txtMatricula.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
+                txtMatriculaActionPerformed(evt);
+            }
+        });
+
+        imageLabel.setText("jLabel1");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(lblAlergias)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtAlergias, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(lblContacto)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtContacto, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(lblTelefono)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(lblMatricula)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(lblNombre)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabelIDUsuario)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtIdUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabelIDUsuario6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtPadecimientos, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(67, 67, 67))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(108, 108, 108)
+                .addComponent(imageLabel)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(82, 82, 82)
+                .addComponent(imageLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 109, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelIDUsuario)
+                    .addComponent(txtIdUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblNombre)
+                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblMatricula)
+                    .addComponent(txtMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblTelefono)
+                    .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblContacto)
+                    .addComponent(txtContacto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblAlergias)
+                    .addComponent(txtAlergias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelIDUsuario6)
+                    .addComponent(txtPadecimientos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(17, 17, 17))
+        );
+
+        uploadButton.setText("subir foto");
+        uploadButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                uploadButtonActionPerformed(evt);
             }
         });
 
@@ -168,88 +310,36 @@ public class frmPerfil extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabelIDUsuario6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtPadecimientos, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(uploadButton))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblAlergias)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtAlergias, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblContacto)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtContacto, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblTelefono)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblMatricula)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblNombre)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabelIDUsuario)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtIdUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(22, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnGuardar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnModificar)
-                .addGap(50, 50, 50))
+                        .addGap(26, 26, 26)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelIDUsuario)
-                    .addComponent(txtIdUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblNombre)
-                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblMatricula)
-                    .addComponent(txtMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblTelefono)
-                    .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblContacto)
-                    .addComponent(txtContacto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblAlergias)
-                    .addComponent(txtAlergias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelIDUsuario6)
-                    .addComponent(txtPadecimientos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnModificar)
-                    .addComponent(btnGuardar))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(52, 52, 52)
+                        .addComponent(uploadButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
-    
-    
     private void actualizarMod() {
         if (isMod) {
             this.setTitle("Ventana de Perfil (MODIFICANDO)");
@@ -272,69 +362,84 @@ public class frmPerfil extends javax.swing.JInternalFrame {
     }
     
     private void llenarDatos() throws ClassNotFoundException {
-        String sql = "SELECT idUsuario, nombre, matricula, telefono, contactoEmergencia, alergias, condicionMedica FROM perfil_con_matricula WHERE idUsuario = ?";
-        
-        try {
-            conn = objetoConexionBD.conexionDataBase();
-            
-            
-            // Preparar y asignar parámetros si es necesario
-            stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, idUsuarioDeseado);
-            
-            
-            System.out.println("Consulta SQL: " + sql);
-            
-            rs = stmt.executeQuery();
+    String sql = "SELECT p.idUsuario, p.nombre, p.apellido_paterno, p.apellido_materno, u.matricula, p.telefono, p.contactoEmergencia, p.alergias, p.condicionMedica, p.foto " +
+                 "FROM perfil p " +
+                 "INNER JOIN usuario u ON p.idUsuario = u.idUsuario " +
+                 "WHERE p.idUsuario = ?";
 
-            // Verificar si hay resultados
-            boolean tieneDatos = false;
-            if (rs.next()) {
-                tieneDatos = true;
-                txtIdUsuario.setText(rs.getString("idUsuario"));
-                txtNombre.setText(rs.getString("nombre"));
-                txtMatricula.setText(rs.getString("matricula"));
-                txtTelefono.setText(rs.getString("telefono"));
-                txtContacto.setText(rs.getString("contactoEmergencia"));
-                txtAlergias.setText(rs.getString("alergias"));
-                txtPadecimientos.setText(rs.getString("condicionMedica"));
-}
+    try {
+        conn = objetoConexionBD.conexionDataBase();
+        int idDeseado1 = Integer.parseInt(idUsuarioDeseado);
 
-            if (!tieneDatos) {
-                JOptionPane.showMessageDialog(null, "¡Datos no localizados!");
-            }
+        stmt = conn.prepareStatement(sql);
+        stmt.setInt(1, idDeseado1);
 
+        System.out.println("Consulta SQL: " + sql);
 
-        } catch (SQLException ex) {
-            Logger.getLogger(frmPerfil.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            // Cerrar recursos de forma segura
-//            try {
-//                if (rs != null) {
-//                    rs.close();
-//                }
-//                if (stmt != null) {
-//                    stmt.close();
-//                }
-//                if (conn != null) {
-//                    conn.close();
-//                }
-//            } catch (SQLException ex) {
-//                Logger.getLogger(frmPerfil.class.getName()).log(Level.SEVERE, null, ex);
-//            }
+        rs = stmt.executeQuery();
+
+        if (rs.next()) {
+            txtIdUsuario.setText(rs.getString("idUsuario"));
+
+            // Concatenar nombre completo
+            String nombreCompleto = rs.getString("nombre") + " " + 
+                                   rs.getString("apellido_paterno") + " " + 
+                                   rs.getString("apellido_materno");
+
+            txtNombre.setText(nombreCompleto.trim());
+            txtMatricula.setText(rs.getString("matricula"));
+            txtTelefono.setText(rs.getString("telefono"));
+            txtContacto.setText(rs.getString("contactoEmergencia"));
+            txtAlergias.setText(rs.getString("alergias"));
+            txtPadecimientos.setText(rs.getString("condicionMedica"));
+            
+            System.out.println("ruta "+ rs.getString("foto"));
+             
+            
+             ImageIcon imageIcon = new ImageIcon(rs.getString("foto"));
+                    Image image = imageIcon.getImage();
+                    Image scaledImage = image.getScaledInstance(200, 150, Image.SCALE_SMOOTH); // Ajustar tamaño
+                    ImageIcon scaledImageIcon = new ImageIcon(scaledImage);
+                    imageLabel.setIcon(scaledImageIcon);
+            
+          
+            
+            
+        } else {
+            JOptionPane.showMessageDialog(null, "¡Datos no localizados!");
         }
+
+    } catch (SQLException ex) {
+        Logger.getLogger(frmPerfil.class.getName()).log(Level.SEVERE, null, ex);
+    } 
+        System.out.println("llenarDatos() busca idUsuario: " + idUsuarioDeseado);
+
     }
+
+
     
     private void guardarDatos() throws ClassNotFoundException, SQLException {
-    String sql = "UPDATE perfil_con_matricula SET nombre = ?, telefono = ?, contactoEmergencia = ?, alergias = ?, condicionMedica = ? WHERE idUsuario = ?";
+    String sql = "UPDATE perfil SET nombre = ?, apellido_paterno = ?, apellido_materno = ?, telefono = ?, contactoEmergencia = ?, alergias = ?, condicionMedica = ? ,foto = ? WHERE idUsuario = ?";
     conn = objetoConexionBD.conexionDataBase();
+    int idDeseado1 = Integer.parseInt(idUsuarioDeseado);
+
     try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-        stmt.setString(1, txtNombre.getText());
-        stmt.setString(2, txtTelefono.getText());
-        stmt.setString(3, txtContacto.getText());
-        stmt.setString(4, txtAlergias.getText());
-        stmt.setString(5, txtPadecimientos.getText());
-        stmt.setInt(6, idUsuarioDeseado);  
+        
+        String[] nombres = txtNombre.getText().trim().split(" ", 3); // dividir en máximo 3 partes
+
+        String nombre = nombres.length > 0 ? nombres[0] : "";
+        String apellidoPaterno = nombres.length > 1 ? nombres[1] : "";
+        String apellidoMaterno = nombres.length > 2 ? nombres[2] : "";
+
+        stmt.setString(1, nombre);
+        stmt.setString(2, apellidoPaterno);
+        stmt.setString(3, apellidoMaterno);
+        stmt.setString(4, txtTelefono.getText());
+        stmt.setString(5, txtContacto.getText());
+        stmt.setString(6, txtAlergias.getText());
+        stmt.setString(7, txtPadecimientos.getText());
+        stmt.setString(8, ruta);
+        stmt.setInt(9, idDeseado1);
 
         int filasActualizadas = stmt.executeUpdate();
 
@@ -346,35 +451,28 @@ public class frmPerfil extends javax.swing.JInternalFrame {
         }
     }
 }
+
     
     private void txtIdUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdUsuarioActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIdUsuarioActionPerformed
-
     private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNombreActionPerformed
-
     private void txtMatriculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMatriculaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtMatriculaActionPerformed
-
     private void txtTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTelefonoActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_txtTelefonoActionPerformed
-
     private void txtContactoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtContactoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtContactoActionPerformed
-
     private void txtAlergiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAlergiasActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtAlergiasActionPerformed
-
     private void txtPadecimientosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPadecimientosActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPadecimientosActionPerformed
-
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         try {
             // TODO add your handling code here:
@@ -395,12 +493,37 @@ public class frmPerfil extends javax.swing.JInternalFrame {
                     
     }//GEN-LAST:event_btnModificarActionPerformed
 
+    private void uploadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadButtonActionPerformed
+        // TODO add your handling code here:
+        
+         if (evt.getSource() == uploadButton) {
+            int returnValue = fileChooser.showOpenDialog(this);
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                try {
+                    System.out.println("ruta "+ selectedFile.getAbsolutePath());
+                    this.ruta=selectedFile.getAbsolutePath();
+                    ImageIcon imageIcon = new ImageIcon(selectedFile.getAbsolutePath());
+                    Image image = imageIcon.getImage();
+                    Image scaledImage = image.getScaledInstance(200, 150, Image.SCALE_SMOOTH); // Ajustar tamaño
+                    ImageIcon scaledImageIcon = new ImageIcon(scaledImage);
+                    imageLabel.setIcon(scaledImageIcon);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Error al cargar la imagen.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+    }//GEN-LAST:event_uploadButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnModificar;
+    private javax.swing.JLabel imageLabel;
     private javax.swing.JLabel jLabelIDUsuario;
     private javax.swing.JLabel jLabelIDUsuario6;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblAlergias;
     private javax.swing.JLabel lblContacto;
     private javax.swing.JLabel lblMatricula;
@@ -413,5 +536,6 @@ public class frmPerfil extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtPadecimientos;
     private javax.swing.JTextField txtTelefono;
+    private javax.swing.JButton uploadButton;
     // End of variables declaration//GEN-END:variables
 }

@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
  *
  * @author santi
  */
-public class frmLoginUsuario extends javax.swing.JFrame {
+public class frmLogin extends javax.swing.JFrame {
 
     /**
      * Creates new form frmLoginUusario
@@ -24,11 +24,9 @@ public class frmLoginUsuario extends javax.swing.JFrame {
     
     boolean pressedUsuario = false;
     boolean pressedPass = false;
-    boolean pressedMat = false;
     
-    int idUsuarioActual;
     
-    public frmLoginUsuario() {
+    public frmLogin() {
         initComponents();
     }
 
@@ -51,9 +49,6 @@ public class frmLoginUsuario extends javax.swing.JFrame {
         jSeparator3 = new javax.swing.JSeparator();
         txtPassword = new javax.swing.JPasswordField();
         jButtonEntrar = new javax.swing.JButton();
-        lblUsuario1 = new javax.swing.JLabel();
-        txtMatricula = new javax.swing.JTextField();
-        jSeparator4 = new javax.swing.JSeparator();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setFocusable(false);
@@ -126,35 +121,7 @@ public class frmLoginUsuario extends javax.swing.JFrame {
                 jButtonEntrarMouseClicked(evt);
             }
         });
-        jButtonEntrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonEntrarActionPerformed(evt);
-            }
-        });
-        backround.add(jButtonEntrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 350, -1, -1));
-
-        lblUsuario1.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
-        lblUsuario1.setText("Matricula:");
-        backround.add(lblUsuario1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, 60, -1));
-
-        txtMatricula.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
-        txtMatricula.setForeground(new java.awt.Color(102, 102, 102));
-        txtMatricula.setText("Ingresa tu matricula");
-        txtMatricula.setBorder(null);
-        txtMatricula.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                txtMatriculaMousePressed(evt);
-            }
-        });
-        txtMatricula.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtMatriculaActionPerformed(evt);
-            }
-        });
-        backround.add(txtMatricula, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 310, 170, -1));
-
-        jSeparator4.setForeground(new java.awt.Color(0, 153, 153));
-        backround.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 330, 180, 10));
+        backround.add(jButtonEntrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 310, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -164,9 +131,7 @@ public class frmLoginUsuario extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(backround, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 6, Short.MAX_VALUE))
+            .addComponent(backround, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -177,18 +142,12 @@ public class frmLoginUsuario extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtUsuarioActionPerformed
 
-    private void jButtonEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEntrarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonEntrarActionPerformed
-
     private void txtUsuarioMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtUsuarioMousePressed
         while (pressedUsuario == false) {
             txtUsuario.setText("");
             txtUsuario.setForeground(Color.black);
             pressedUsuario = true;
-        }
-        
-        
+        }        
     }//GEN-LAST:event_txtUsuarioMousePressed
 
     private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
@@ -210,7 +169,6 @@ public class frmLoginUsuario extends javax.swing.JFrame {
         Usuario objUsuario = new Usuario();
         objUsuario.setUsuario(txtUsuario.getText());
         objUsuario.setPassword(new String(txtPassword.getPassword()));
-        objUsuario.setMatricula(txtMatricula.getText());
 
         //validando al usuario contra la base de datos
         if (this.validarUsuario(objUsuario)) {
@@ -219,59 +177,49 @@ public class frmLoginUsuario extends javax.swing.JFrame {
             // Se oculta esta ventana
             this.setVisible(false);
             //Se construye el objeto de la nueva ventana
-            frmMenuPrincipal menuPrincipal = new frmMenuPrincipal();
+            frmMenuPrincipal menuPrincipal = new frmMenuPrincipal(objUsuario);
             //se visualiza la pantalla del menu principal
             menuPrincipal.setVisible(true);
-            menuPrincipal.setIdUsuarioActual(idUsuarioActual);
+//            menuPrincipal.setIdUsuarioActual(idUsuarioActual);
             this.dispose();
         } else {
             JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
         }
     }//GEN-LAST:event_jButtonEntrarMouseClicked
 
-    private void txtMatriculaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtMatriculaMousePressed
-        // TODO add your handling code here:
-        while (pressedMat == false) {
-            txtMatricula.setText("");
-            txtMatricula.setForeground(Color.black);
-            pressedMat = true;
-        }
-    }//GEN-LAST:event_txtMatriculaMousePressed
+public boolean validarUsuario(Usuario objUsuario) {
+    boolean accesoPermitido = false;  
+    Connection conn;  
+    PreparedStatement stmt = null;  
+    ResultSet rs = null;  
 
-    private void txtMatriculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMatriculaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtMatriculaActionPerformed
+    try {
+        ConexionBD objetoConexionBD = new ConexionBD();
+        conn = objetoConexionBD.conexionDataBase();
+        UsuarioBD bd = new UsuarioBD();
 
-    public boolean validarUsuario(Usuario objUsuario) {
-
-        //variables de clase 
-        boolean accesoPermitido = false;  //variable de retorno en caso de ser falso o verdadero
-        Connection conn;   // objeto de conexion
-        PreparedStatement stmt = null;   // variable para la sentencia sql
-        ResultSet rs = null;    //variable para resultado de consulta sql
-        //aqui se conectara a la base de datos y se buscara el usuario en la tabla de usuarios del sistema para su comparacion
-        try {
-            ConexionBD objetoConexionBD = new ConexionBD();
-            conn = objetoConexionBD.conexionDataBase();
-            UsuarioBD bd = new UsuarioBD();
-            rs = bd.consultarUsuarioLogin(conn, objUsuario.getUsuario(), objUsuario.getPassword(), objUsuario.getMatricula());
-            if (rs.next()) {  //encontro al menos 1 registro con los datos
-                //accedemos al sistema
-                accesoPermitido = true;
-            }
+        rs = bd.consultarUsuarioLogin(conn, objUsuario.getUsuario(), objUsuario.getPassword());
+        
+        if (rs.next()) {  // Encontró al usuario
+            objUsuario.setRol(rs.getString("rol"));
+            objUsuario.setIdUsuario(rs.getInt("idusuario"));
+            objUsuario.setMatricula(rs.getString("matricula"));  
+            accesoPermitido = true;
             
-            idUsuarioActual = rs.getInt(1);
-            
-            //se cierra la conexion
-            objetoConexionBD.cerrarConexion(conn);
-
-        } catch (HeadlessException | ClassNotFoundException | SQLException ex) {
-//            JOptionPane.showMessageDialog(this, "Error de conexión "
-//                    + ex.getMessage());
+            System.out.println("Usuario validado: id=" + objUsuario.getIdUsuario() + ", usuario=" + objUsuario.getUsuario());
         }
-        //regresamos si el usuario se localizo
-        return accesoPermitido;
+
+        // Guarda el id para uso interno si quieres
+//        idUsuarioActual = rs.getInt(1);
+
+        objetoConexionBD.cerrarConexion(conn);
+
+    } catch (HeadlessException | ClassNotFoundException | SQLException ex) {
+        // Manejo de errores
     }
+
+    return accesoPermitido;
+}
     
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -287,20 +235,21 @@ public class frmLoginUsuario extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmLoginUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmLoginUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmLoginUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmLoginUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmLoginUsuario().setVisible(true);
+                new frmLogin().setVisible(true);
             }
         });
     }
@@ -311,13 +260,10 @@ public class frmLoginUsuario extends javax.swing.JFrame {
     private javax.swing.JButton jButtonEntrar;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JSeparator jSeparator4;
     private javax.swing.JLabel lblBienvenido;
     private javax.swing.JLabel lblContraseña;
     private javax.swing.JLabel lblIcono;
     private javax.swing.JLabel lblUsuario;
-    private javax.swing.JLabel lblUsuario1;
-    private javax.swing.JTextField txtMatricula;
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables

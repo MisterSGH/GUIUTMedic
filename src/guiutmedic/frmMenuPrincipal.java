@@ -168,19 +168,23 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuPerfilMouseClicked
 
     private void jMenuAgendarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuAgendarMouseClicked
-        frmAgendar ventanaGUI = new frmAgendar();   
-        this.desktopPane.add(ventanaGUI);
-        ventanaGUI.setVisible(true);   
-//        ventanaGUI.setIdUsuarioDeseado(idUsuarioActual);
+        try{
+        frmAgendar ventanaAgendar = new frmAgendar(objetoMenuP);   
+        this.desktopPane.add(ventanaAgendar);
+        ventanaAgendar.setVisible(true); 
+        
+        }catch (ClassNotFoundException ex) {
+            Logger.getLogger(frmMenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuAgendarMouseClicked
 
     private void jMenuReagendarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuReagendarMouseClicked
          
-//        int idCita = 123; 
-//    int idPerfil = 456;
-//        frmReagendar ventanaGUI = new frmReagendar(idCita, idPerfil);
-//    this.desktopPane.add(ventanaGUI);
-//    ventanaGUI.setVisible(true);
+        int idCita = 123; 
+    int idPerfil = 456;
+        frmReagendar ventanaGUI = new frmReagendar(idCita, idPerfil);
+    this.desktopPane.add(ventanaGUI);
+    ventanaGUI.setVisible(true);
         
     }//GEN-LAST:event_jMenuReagendarMouseClicked
 

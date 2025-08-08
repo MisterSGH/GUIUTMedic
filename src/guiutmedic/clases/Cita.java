@@ -12,7 +12,7 @@ public class Cita {
     private String profesion;
     private int idMotivo;
     private String motivo;
-    private String fecha;
+    private String fechaMSQL="//";
     private String hora;
     private String observaciones;
     private String estado; // ← NUEVO CAMPO
@@ -25,20 +25,21 @@ public class Cita {
         this.idPerfil = idPerfil;
         this.idMedico = idMedico;
         this.idMotivo = idMotivo;
-        this.fecha = fecha;
+        this.fechaMSQL = fecha;
         this.hora = hora;
         this.observaciones = observaciones;
         this.estado = estado;
     }
     
-//    // Constructor sin idCita, idMedico
-//    public Cita(int idPerfil, String profesion, String motivo, String fecha, String hora) {
-//        this.idPerfil = idPerfil;
-//        this.profesion = profesion;
-//        this.motivo = motivo;
-//        this.fecha = fecha;
-//        this.hora = hora;
-//    }
+    
+    // Constructor sin idCita, idMedico
+    public Cita(int idPerfil, String profesion, String motivo, String fecha, String hora) {
+        this.idPerfil = idPerfil;
+        this.profesion = profesion;
+        this.motivo = motivo;
+        this.fechaMSQL = fecha;
+        this.hora = hora;
+    }
 
     // Constructor completo para leer/consultar
     public Cita(int idCita, int idPerfil, int idMedico, int idMotivo, String fecha, String hora, String observaciones, String estado) {
@@ -46,7 +47,7 @@ public class Cita {
         this.idPerfil = idPerfil;
         this.idMedico = idMedico;
         this.idMotivo = idMotivo;
-        this.fecha = fecha;
+        this.fechaMSQL = fecha;
         this.hora = hora;
         this.observaciones = observaciones;
         this.estado = estado;
@@ -66,7 +67,7 @@ public class Cita {
     { return idMotivo; }
     
     public String getFecha()
-    { return fecha; }
+    { return fechaMSQL; }
     
     public String getHora() 
     { return hora; }
@@ -90,7 +91,7 @@ public class Cita {
     public void setIdMotivo(int idMotivo)
     { this.idMotivo = idMotivo; }
     
-    public void setFecha(String fecha) { this.fecha = fecha; }
+    public void setFecha(String fecha) { this.fechaMSQL = fecha; }
     
     public void setHora(String hora) 
     { this.hora = hora; }

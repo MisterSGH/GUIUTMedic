@@ -22,7 +22,7 @@ public boolean registrarCita(Connection conn, Cita cita) throws SQLException {
         ps.setString(4, cita.getFecha());
         ps.setString(5, cita.getHora());
         ps.setString(6, cita.getObservaciones());
-        ps.setString(7, cita.getEstado());
+        ps.setString(7, "Programada");
 
         int filas = ps.executeUpdate();
         return filas > 0;
