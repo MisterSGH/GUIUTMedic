@@ -1,35 +1,94 @@
 package guiutmedic;
 
+import guiutmedic.clases.Cita;
+import guiutmedic.clases.CitaBD;
 import guiutmedic.clases.ConexionBD;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
 public class frmReagendar extends javax.swing.JInternalFrame {
 
-    private final int idCita;
-    private final int idPerfil;
-    private final ConexionBD conexionBD;
+    private final int idPaciente;
+    private final Map<Integer, Cita> mapaCitas = new HashMap<>();
+    private final CitaBD citaBD = new CitaBD();
+    private final ConexionBD conexionBD = new ConexionBD();
 
-    public frmReagendar(int idCita, int idPerfil) {
+    public frmReagendar(int idPaciente) {
         initComponents();
-        this.idCita = idCita;
-        this.idPerfil = idPerfil;
-        this.conexionBD = new ConexionBD();
-        
-        if (timePicker1 != null) {
-            try {
-                timePicker1.setText("09:00");
-            } catch (Exception e) {
-               
+        this.idPaciente = idPaciente;
+        initFormulario();
+    }
+
+    frmReagendar(int idCita, int idPerfil) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    private void initFormulario() {
+        cargarCitasPaciente();
+        habilitarControles(false);
+    }
+
+    private void cargarCitasPaciente() {
+        Connection conn = null;
+        try {
+            conn = conexionBD.conexionDataBase();
+            String sql = "SELECT idCita, fecha, hora, motivo, estado "
+                       + "FROM cita "
+                       + "WHERE idPerfil = ? AND estado IN ('Programada', 'Reprogramada') "
+                       + "ORDER BY fecha DESC, hora DESC";
+            
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setInt(1, idPaciente);
+                ResultSet rs = ps.executeQuery();
+                
+                DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+                mapaCitas.clear();
+                
+                while (rs.next()) {
+                    Cita cita = new Cita();
+                    cita.setIdCita(rs.getInt("idCita"));
+                    cita.setFecha(rs.getString("fecha"));
+                    cita.setHora(rs.getString("hora"));
+                    cita.setMotivo(rs.getString("motivo"));
+                    cita.setEstado(rs.getString("estado"));
+                    
+                    String textoCita = "Cita #" + cita.getIdCita() + " - "
+                                    + cita.getFecha() + " " + cita.getHora() + " - "
+                                    + cita.getMotivo();
+                    
+                    model.addElement(textoCita);
+                    mapaCitas.put(cita.getIdCita(), cita);
+                }
+                
+                cmbCita.setModel(model);
+                
+                if (model.getSize() == 0) {
+                    JOptionPane.showMessageDialog(this, 
+                        "No tienes citas programadas para reagendar", 
+                        "Informacion", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        } catch (SQLException | ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(this, 
+                "Error al cargar citas: " + ex.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
             }
         }
+
+    private void habilitarControles(boolean habilitar) {
+        jDateChooser1.setEnabled(habilitar);
+        timePicker1.setEnabled(habilitar);
+        cbmMotivo.setEnabled(habilitar);
+        btnReagendar.setEnabled(habilitar);
     }
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -39,7 +98,7 @@ public class frmReagendar extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        cmbProfesionales = new javax.swing.JComboBox<>();
+        cmbCita = new javax.swing.JComboBox<>();
         lblHora = new javax.swing.JLabel();
         lblFecha = new javax.swing.JLabel();
         lblMotivo = new javax.swing.JLabel();
@@ -54,10 +113,9 @@ public class frmReagendar extends javax.swing.JInternalFrame {
         setMaximizable(true);
         setResizable(true);
 
-        cmbProfesionales.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Medico", "Psicologo", "Nutricionista" }));
-        cmbProfesionales.addActionListener(new java.awt.event.ActionListener() {
+        cmbCita.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbProfesionalesActionPerformed(evt);
+                cmbCitaActionPerformed(evt);
             }
         });
 
@@ -104,7 +162,7 @@ public class frmReagendar extends javax.swing.JInternalFrame {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnReagendar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnCancelar)
                         .addGap(50, 50, 50))
                     .addGroup(layout.createSequentialGroup()
@@ -112,7 +170,7 @@ public class frmReagendar extends javax.swing.JInternalFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(lblCita)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cmbProfesionales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(cmbCita, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblHora)
@@ -132,7 +190,7 @@ public class frmReagendar extends javax.swing.JInternalFrame {
                 .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCita)
-                    .addComponent(cmbProfesionales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbCita, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -145,7 +203,7 @@ public class frmReagendar extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblMotivo)
                     .addComponent(cbmMotivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnReagendar)
                     .addComponent(btnCancelar))
@@ -155,106 +213,89 @@ public class frmReagendar extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cmbProfesionalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbProfesionalesActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbProfesionalesActionPerformed
+    private void cmbCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCitaActionPerformed
+        if (cmbCita.getSelectedItem() == null) return;
+        
+        String seleccion = cmbCita.getSelectedItem().toString();
+        try {
+            int idCita = extraerIdCita(seleccion);
+            Cita cita = mapaCitas.get(idCita);
+            
+            if (cita != null) {
+                cargarDatosCita(cita);
+                habilitarControles(true);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, 
+                "Error al obtener cita: " + e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private int extraerIdCita(String textoCita) {
+        int startIndex = textoCita.indexOf("#") + 1;
+        int endIndex = textoCita.indexOf(" -", startIndex);
+        return Integer.parseInt(textoCita.substring(startIndex, endIndex).trim());
+    }
+    
+    private void cargarDatosCita(Cita cita) {
+        try {
+            jDateChooser1.setDate(new SimpleDateFormat("yyyy-MM-dd").parse(cita.getFecha()));
+            timePicker1.setText(cita.getHora());
+            cbmMotivo.setSelectedItem(cita.getMotivo());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, 
+                "Error al cargar datos: " + ex.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_cmbCitaActionPerformed
 
     private void btnReagendarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReagendarActionPerformed
-     if (jDateChooser1.getDate() == null) {
-            JOptionPane.showMessageDialog(this, "Seleccione una fecha valida");
+if (cmbCita.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(this, 
+                "Seleccione una cita primero", 
+                "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-        String nuevoProfesional = (String) cmbProfesionales.getSelectedItem();
-        String nuevoMotivo = (String) cbmMotivo.getSelectedItem();
-        String nuevaFecha = new java.sql.Date(jDateChooser1.getDate().getTime()).toString();
         
-      
-        String nuevaHora = obtenerHoraFormateada();
-
-        if (nuevoProfesional == null || nuevoMotivo == null || nuevaHora.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Complete todos los campos");
-            return;
-        }
-
-        if (reagendarCita(nuevoProfesional, nuevoMotivo, nuevaFecha, nuevaHora)) {
-            JOptionPane.showMessageDialog(this, "Cita reagendada con exito");
-            this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "Error al reagendar la cita");
-        }
-    }
-
-    private String obtenerHoraFormateada() {
-        try {
-            return timePicker1.getText().trim();
-        } catch (Exception e) {
-            return "09:00"; 
-        }
-    }
-
-    private boolean reagendarCita(String profesional, String motivo, String fecha, String hora) {
+        String seleccion = cmbCita.getSelectedItem().toString();
         Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        
         try {
             conn = conexionBD.conexionDataBase();
-            if (conn == null) {
-                JOptionPane.showMessageDialog(this, "Error de conexión a la base de datos");
-                return false;
+            int idCita = extraerIdCita(seleccion);
+            
+            // Validar nueva fecha/hora
+            String nuevaFecha = new SimpleDateFormat("yyyy-MM-dd").format(jDateChooser1.getDate());
+            String nuevaHora = timePicker1.getText();
+            
+            if (nuevaHora == null || nuevaHora.isEmpty()) {
+                JOptionPane.showMessageDialog(this, 
+                    "Seleccione una hora valida", 
+                    "Advertencia", JOptionPane.WARNING_MESSAGE);
+                return;
             }
             
-            String checkSql = "SELECT COUNT(*) FROM cita WHERE fecha = ? AND hora = ?";
-            ps = conn.prepareStatement(checkSql);
-            ps.setString(1, fecha);
-            ps.setString(2, hora);
-            rs = ps.executeQuery();
-            
-            if (rs.next() && rs.getInt(1) > 0) {
-                JOptionPane.showMessageDialog(this, "El horario no esta disponible");
-                return false;
+            // Reagendar usando la clase CitaBD
+            if (citaBD.reagendarCita(conn, idCita, idPaciente, nuevaFecha, nuevaHora)) {
+                JOptionPane.showMessageDialog(this, 
+                    "Cita reagendada con exito", 
+                    "Exito", JOptionPane.INFORMATION_MESSAGE);
+                
+                // Actualizar interfaz
+                cargarCitasPaciente();
+                habilitarControles(false);
+                cmbCita.setSelectedIndex(-1);
+            } else {
+                JOptionPane.showMessageDialog(this, 
+                    "Error al reagendar la cita", 
+                    "Error", JOptionPane.ERROR_MESSAGE);
             }
-            
-            if (rs != null) rs.close();
-            if (ps != null) ps.close();
-            
-            String updateSql = "UPDATE cita SET "
-                    + "profesion = ?, "
-                    + "motivo = ?, "
-                    + "fecha = ?, "
-                    + "hora = ?, "
-                    + "estado = 'Reagendada' "
-                    + "WHERE idCita = ? AND idPerfil = ?";
-            
-            ps = conn.prepareStatement(updateSql);
-            ps.setString(1, profesional);
-            ps.setString(2, motivo);
-            ps.setString(3, fecha);
-            ps.setString(4, hora);
-            ps.setInt(5, idCita);
-            ps.setInt(6, idPerfil);
-            
-            int filasActualizadas = ps.executeUpdate();
-            return filasActualizadas > 0;
-            
-        } catch (Exception ex) { 
-            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
-            ex.printStackTrace();
-            return false;
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, 
+                "Error al reagendar: " + ex.getMessage(), 
+                "Error", JOptionPane.ERROR_MESSAGE);
         } finally {
-           
-            try {
-                if (rs != null) rs.close();
-            } catch (SQLException e) {}
-            
-            try {
-                if (ps != null) ps.close();
-            } catch (SQLException e) {}
-            
-         
-    }
-
+        }
     }//GEN-LAST:event_btnReagendarActionPerformed
 
     private void cbmMotivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbmMotivoActionPerformed
@@ -262,7 +303,7 @@ public class frmReagendar extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cbmMotivoActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-       
+      
     }//GEN-LAST:event_btnCancelarActionPerformed
 
 
@@ -270,7 +311,7 @@ public class frmReagendar extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnReagendar;
     private javax.swing.JComboBox<String> cbmMotivo;
-    private javax.swing.JComboBox<String> cmbProfesionales;
+    private javax.swing.JComboBox<String> cmbCita;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel lblCita;
     private javax.swing.JLabel lblFecha;
