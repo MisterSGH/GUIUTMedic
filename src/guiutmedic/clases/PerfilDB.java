@@ -25,4 +25,3 @@ public class PerfilDB {
         return idPerfil;
     }
 }
-//int idPerfil  = perfilDB.obtenerIdPerfilPorIdUsuario(conn, objetoMenuP.getIdUsuario());

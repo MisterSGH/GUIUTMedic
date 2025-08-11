@@ -5,9 +5,9 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import com.toedter.calendar.JDateChooser;
 import guiutmedic.clases.Cita;
-import guiutmedic.clases.PerfilDB;
 import guiutmedic.clases.CitaBD;
 import guiutmedic.clases.ConexionBD;
+import guiutmedic.clases.PerfilDB;
 import guiutmedic.clases.PersonalSalud;
 import guiutmedic.clases.PersonalSaludBD;
 import guiutmedic.clases.Usuario;
@@ -335,7 +335,7 @@ public class frmAgendar extends javax.swing.JInternalFrame {
                 String fechaMySQL = formatoMySQL.format(fecha); // convierte Date a String en formato MySQL
                 
             PerfilDB perfilDB = new PerfilDB();
-            int idPerfil = perfilDB.obtenerIdPerfilPorIdUsuario(conn, objetoMenuP.getIdUsuario()); //,etodo para obtener el idperfil del idusuario
+            int idPerfil = perfilDB.obtenerIdPerfilPorIdUsuario(conn, objetoMenuP.getIdUsuario()); //metodo para obtener el idperfil del idusuario
 
             fechaMSQL=fechaMySQL;
             String hora = txtHora.getText();
