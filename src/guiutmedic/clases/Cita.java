@@ -18,7 +18,7 @@ public class Cita {
     private String estado; // ← NUEVO CAMPO
 
     // Constructor vacío
-    public Cita() {}
+    public Cita(int idCita1, String fecha, String hora1, int idMotivo1) {}
 
     // Constructor sin idCita (se genera en la BD)
     public Cita(int idPerfil, int idMedico, int idMotivo, String fecha, String hora, String observaciones, String estado) {
@@ -118,5 +118,7 @@ public class Cita {
         this.motivo = motivo;
     }
     
+    public Cita() {
     
+}
 }

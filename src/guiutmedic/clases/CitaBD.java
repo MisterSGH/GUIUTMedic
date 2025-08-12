@@ -39,16 +39,26 @@ public boolean cancelarCita(Connection conn, int idCita, int idPerfil) throws SQ
     }
 }
 
-public boolean reagendarCita(Connection conn, int idCita, int idPerfil, String nuevaFecha, String nuevaHora) throws SQLException {
-    String sql = "UPDATE cita SET fecha = ?, hora = ?, estado = 'Reprogramada' WHERE idCita = ? AND idPerfil = ?";
-    try (PreparedStatement ps = conn.prepareStatement(sql)) {
-        ps.setString(1, nuevaFecha);
-        ps.setString(2, nuevaHora);
-        ps.setInt(3, idCita);
-        ps.setInt(4, idPerfil);
-
-        int filas = ps.executeUpdate();
-        return filas > 0;
+public boolean reagendarCita(Connection conn, int idCita, int idMotivo, String fecha, String hora) {
+    try {
+        String sql = "UPDATE cita SET "
+                   + "fecha = ?, "
+                   + "hora = ?, "
+                   + "idMotivo = ?, "  // Actualizar idMotivo
+                   + "estado = 'Reprogramada' "
+                   + "WHERE idCita = ?";
+        
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, fecha);
+            ps.setString(2, hora);
+            ps.setInt(3, idMotivo);
+            ps.setInt(4, idCita);
+            
+            return ps.executeUpdate() > 0;
+        }
+    } catch (SQLException ex) {
+        System.err.println("Error al reagendar: " + ex.getMessage());
+        return false;
     }
 }
 

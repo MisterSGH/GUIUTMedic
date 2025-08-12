@@ -2,6 +2,7 @@
 package guiutmedic;
 
 import guiutmedic.clases.Usuario;
+import guiutmedic.frmReagendar;
 import guiutmedic.utilerias.fondoPantallaMenu;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -179,13 +180,15 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuAgendarMouseClicked
 
     private void jMenuReagendarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuReagendarMouseClicked
-         
-        int idCita = 123; 
-    int idPerfil = 456;
-        frmReagendar ventanaGUI = new frmReagendar(idCita, idPerfil);
-    this.desktopPane.add(ventanaGUI);
-    ventanaGUI.setVisible(true);
-        
+   try {
+      frmReagendar ventanaReagendar = new frmReagendar(objetoMenuP);
+      this.desktopPane.add(ventanaReagendar);
+      ventanaReagendar.setVisible(true);
+      System.out.println("ID Usuario actual: " + this.objetoMenuP.getIdUsuario());
+      System.out.println("ID Perfil actual: " + this.objetoMenuP.getIdPerfil());
+       } catch (ClassNotFoundException ex) {
+           Logger.getLogger(frmMenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+    }
     }//GEN-LAST:event_jMenuReagendarMouseClicked
 
     private void jMenuHistorialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuHistorialMouseClicked

@@ -166,25 +166,38 @@ public class frmLogin extends javax.swing.JFrame {
         // Este metodo captara los datos ingresados en txtUsuario y txtPassword
         // para su validaion
         // Aqui se programara la autenticacion del usuario
-        Usuario objUsuario = new Usuario();
-        objUsuario.setUsuario(txtUsuario.getText());
-        objUsuario.setPassword(new String(txtPassword.getPassword()));
+         Usuario objUsuario = new Usuario();
+    objUsuario.setUsuario(txtUsuario.getText());
+    objUsuario.setPassword(new String(txtPassword.getPassword()));
 
         //validando al usuario contra la base de datos
-        if (this.validarUsuario(objUsuario)) {
+         if (this.validarUsuario(objUsuario)) {
             //si el usuario es valido
+           try (Connection conn = new ConexionBD().conexionDataBase()) {
+            guiutmedic.clases.PerfilDB perfilDB = new guiutmedic.clases.PerfilDB(); // Asegúrate de importar bien
+            int idPerfil = perfilDB.obtenerIdPerfilPorIdUsuario(conn, objUsuario.getIdUsuario());
+
+            
+
+            objUsuario.setIdPerfil(idPerfil);
+
             JOptionPane.showMessageDialog(this, "Bienvenido " + objUsuario.getUsuario());
+
             // Se oculta esta ventana
             this.setVisible(false);
-            //Se construye el objeto de la nueva ventana
+            // Se construye el menú principal con el usuario completo
             frmMenuPrincipal menuPrincipal = new frmMenuPrincipal(objUsuario);
-            //se visualiza la pantalla del menu principal
             menuPrincipal.setVisible(true);
-//            menuPrincipal.setIdUsuarioActual(idUsuarioActual);
             this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error en login: " + ex.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
         }
+
+    } else {
+        JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
+    }
     }//GEN-LAST:event_jButtonEntrarMouseClicked
 
 public boolean validarUsuario(Usuario objUsuario) {
@@ -254,6 +267,8 @@ public boolean validarUsuario(Usuario objUsuario) {
         });
     }
  
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel backround;
