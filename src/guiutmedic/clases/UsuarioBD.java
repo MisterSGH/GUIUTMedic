@@ -18,9 +18,9 @@ public class UsuarioBD {
         String sql = "INSERT INTO usuario (matricula, usuario, password, rol) VALUES (?, ?, ?, ?)";  //se arma la sentencia de la consulta con parametros
         //  Statement.RETURN_GENERATED_KEYS --> constante que  regresa el id generado despues de insertar
         try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setString(1, usuario.getUsuario());    // Se establecen los parametros 
-            stmt.setString(2, usuario.getPassword());
-            stmt.setString(3, usuario.getUsuario());
+            stmt.setString(1, usuario.getMatricula());    // Se establecen los parametros 
+            stmt.setString(2, usuario.getUsuario());
+            stmt.setString(3, usuario.getPassword());
             stmt.setString(4, usuario.getRol());
             int filas = stmt.executeUpdate();
 
@@ -35,24 +35,34 @@ public class UsuarioBD {
         return -1;
     }
 
-    public void insertarCliente(Connection conn, Usuario usuario, int idUsuario) throws SQLException {
-        String sql = "INSERT INTO cliente (nombre, beca, porcentaje, idusuario) VALUES (?, ?, ?, ?)"; //se arma la sentencia de la consulta con parametros
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {   //se prepara la sentencia SQL mediante la variable statement--> stmt
-            stmt.setString(1, usuario.getUsuario());   // Se establecen los parametros 
-            stmt.setBoolean(2, false);
-            stmt.setInt(3, 0);
-            stmt.setInt(4, idUsuario);
-            stmt.executeUpdate();
-        }
-    }
+//    public void insertarCliente(Connection conn, Usuario usuario, int idUsuario) throws SQLException {
+//        String sql = "INSERT INTO cliente (nombre, beca, porcentaje, idusuario) VALUES (?, ?, ?, ?)"; //se arma la sentencia de la consulta con parametros
+//        try (PreparedStatement stmt = conn.prepareStatement(sql)) {   //se prepara la sentencia SQL mediante la variable statement--> stmt
+//            stmt.setString(1, usuario.getUsuario());   // Se establecen los parametros 
+//            stmt.setBoolean(2, false);
+//            stmt.setInt(3, 0);
+//            stmt.setInt(4, idUsuario);
+//            stmt.executeUpdate();
+//        }
+//    }
 
     public void insertarEmpleado(Connection conn, Usuario usuario, int idUsuario) throws SQLException {
-        String sql = "INSERT INTO empleado (nombre, turno, idusuario) VALUES (?, ?, ?)";  //se arma la sentencia de la consulta con parametros
+        String sql = "INSERT INTO personal_salud (nombre, profesion, correo, telefono, idUsuario) VALUES (?, ?, ?, ?, ?)";  //se arma la sentencia de la consulta con parametros
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {   //se prepara la sentencia SQL mediante la variable statement--> stmt
             stmt.setString(1, usuario.getUsuario()); // Se establecen los parametros 
             stmt.setString(2, "");
-            stmt.setInt(3, idUsuario);
+            stmt.setString(3, "");
+            stmt.setString(4, "");
+            stmt.setInt(5, idUsuario);
             stmt.executeUpdate();
+        }
+    }
+    
+    public boolean eliminarEmpleado(Connection conn, int idUsuario) throws SQLException {
+        String sql = "DELETE FROM personal_salud WHERE idUsuario = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idUsuario);
+            return stmt.executeUpdate() > 0;
         }
     }
 

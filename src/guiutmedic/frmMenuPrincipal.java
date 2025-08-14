@@ -55,6 +55,13 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     } catch (NullPointerException e) {
         System.err.println("No se pudo cargar el icono de la aplicación: " + e.getMessage());
     }
+    
+    if (objUsuario.getRol().equals("ADMIN")) {
+        jMenuAdmin.setVisible(true);
+    } else {
+        jMenuAdmin.setVisible(false);
+    }
+    
 }
 
 
@@ -74,6 +81,10 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
         jMenuAgendar = new javax.swing.JMenu();
         jMenuReagendar = new javax.swing.JMenu();
         jMenuHistorial = new javax.swing.JMenu();
+        jMenuAdmin = new javax.swing.JMenu();
+        jMenuGestionarUsuarios = new javax.swing.JMenuItem();
+        jMenuGestionarProfesionistas = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jMenuSalir = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -120,6 +131,27 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
             }
         });
         JmenuBar.add(jMenuHistorial);
+
+        jMenuAdmin.setText("ADMIN");
+
+        jMenuGestionarUsuarios.setText("Gestionar Usuarios");
+        jMenuGestionarUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuGestionarUsuariosActionPerformed(evt);
+            }
+        });
+        jMenuAdmin.add(jMenuGestionarUsuarios);
+
+        jMenuGestionarProfesionistas.setText("Gestionar Profesionistas");
+        jMenuGestionarProfesionistas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuGestionarProfesionistasActionPerformed(evt);
+            }
+        });
+        jMenuAdmin.add(jMenuGestionarProfesionistas);
+        jMenuAdmin.add(jMenuItem3);
+
+        JmenuBar.add(jMenuAdmin);
 
         jMenuSalir.setText("Salir");
         jMenuSalir.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -197,6 +229,26 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
         ventanaGUI.setVisible(true);
     }//GEN-LAST:event_jMenuHistorialMouseClicked
 
+    private void jMenuGestionarUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuGestionarUsuariosActionPerformed
+        try {
+            frmGestionUsuarios ventanaGUI = new frmGestionUsuarios(objetoMenuP);
+            this.desktopPane.add(ventanaGUI);
+            ventanaGUI.setVisible(true);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(frmMenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuGestionarUsuariosActionPerformed
+
+    private void jMenuGestionarProfesionistasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuGestionarProfesionistasActionPerformed
+        try {
+            frmGestionProfesionistas ventanaGUI = new frmGestionProfesionistas(objetoMenuP);
+            this.desktopPane.add(ventanaGUI);
+            ventanaGUI.setVisible(true);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(frmMenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuGestionarProfesionistasActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -235,8 +287,12 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar JmenuBar;
     private javax.swing.JDesktopPane desktopPane;
+    private javax.swing.JMenu jMenuAdmin;
     private javax.swing.JMenu jMenuAgendar;
+    private javax.swing.JMenuItem jMenuGestionarProfesionistas;
+    private javax.swing.JMenuItem jMenuGestionarUsuarios;
     private javax.swing.JMenu jMenuHistorial;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenu jMenuPerfil;
     private javax.swing.JMenu jMenuReagendar;
     private javax.swing.JMenu jMenuSalir;
