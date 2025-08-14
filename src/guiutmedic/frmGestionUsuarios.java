@@ -587,8 +587,12 @@ public class frmGestionUsuarios extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_tblUsuariosMouseClicked
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        // Se llama al metodo de registrar al usuario
-        registrarUsuario();
+        try {
+            // Se llama al metodo de registrar al usuario
+            registrarUsuario();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(frmGestionUsuarios.class.getName()).log(Level.SEVERE, null, ex);
+        }
         // Se desactiva el boton de agregar
         btnAgregar.setEnabled(false);
         // Se activa el boton de nuevo
@@ -709,41 +713,107 @@ public class frmGestionUsuarios extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnCerrarActionPerformed
 
     
-    private void registrarUsuario() {
-        Usuario objUsuario = new Usuario(txtMatricula.getText(), txtPassword.getText(), txtUsuario.getText(), cmbRol.getSelectedItem().toString());
-        UsuarioBD objBD = new UsuarioBD();
-        PerfilDB perBD = new PerfilDB();
-        String rol = objUsuario.getRol();
-        
-        try (Connection conn = objetoConexionBD.conexionDataBase()) {
-            int idGenerado = objBD.insertarUsuario(conn, objUsuario);
-            if (idGenerado > 0) {
-                JOptionPane.showMessageDialog(null, "¡Usuario registrado correctamente! ID generado: "+ idGenerado);
-                
-                if (rol.equalsIgnoreCase("paciente")) {
-                    objBD.insertarUsuario(conn, objUsuario);
-                    JOptionPane.showMessageDialog(null, "¡Paciente insertado correctamente!");
-                } else if (rol.equalsIgnoreCase("medico")) {
-                    objBD.insertarEmpleado(conn, objUsuario, idGenerado);
-                    JOptionPane.showMessageDialog(null, "¡Personal insertado corretamente!");
-                }
-                
+//    private void registrarUsuario() {
+//        Usuario objUsuario = new Usuario(txtMatricula.getText(), txtPassword.getText(), txtUsuario.getText(), cmbRol.getSelectedItem().toString());
+//        UsuarioBD objBD = new UsuarioBD();
+//        PerfilDB perBD = new PerfilDB();
+//        String rol = objUsuario.getRol();
+//        
+//        try (Connection conn = objetoConexionBD.conexionDataBase()) {
+//            int idGenerado = objBD.insertarUsuario(conn, objUsuario);
+//            if (idGenerado > 0) {
+//                JOptionPane.showMessageDialog(null, "¡Usuario registrado correctamente! ID generado: "+ idGenerado);
+//                System.out.println("Antes de insertar perfil");
+//                perBD.insertarPerfil(conn, objUsuario, idGenerado);
+//                System.out.println("Después de insertar perfil");
+//                JOptionPane.showMessageDialog(null, "¡Perfil insertado correctamente!");
+//                
+//                if (rol.equalsIgnoreCase("paciente")) {
+//                    objBD.insertarUsuario(conn, objUsuario);
+//                    JOptionPane.showMessageDialog(null, "¡Paciente insertado correctamente!");
+//                } else if (rol.equalsIgnoreCase("medico")) {
+//                    objBD.insertarEmpleado(conn, objUsuario, idGenerado);
+//                    JOptionPane.showMessageDialog(null, "¡Personal insertado corretamente!");
+//                }
+//                
+//                
+//                llenarDataTable();
+//                if(tblUsuarios.getRowCount() > 0) {
+//                    int ultimaFila = tblUsuarios.getRowCount() - 1;
+//                    tblUsuarios.setRowSelectionInterval(ultimaFila, ultimaFila);
+//                    llenarTextBox();
+//                }
+//            } else {
+//                JOptionPane.showMessageDialog(null, "No se pudo registrar el usuario.");
+//            }
+//        } catch (SQLException | ClassNotFoundException ex) {
+////            JOptionPane.showMessageDialog(null, "Error al registrar usuario: "+ ex.getMessage());
+//        }
+//    }
+    
+    private void registrarUsuario() throws ClassNotFoundException {
+    Usuario objUsuario = new Usuario(
+        txtMatricula.getText(),
+        txtPassword.getText(),
+        txtUsuario.getText(),
+        cmbRol.getSelectedItem().toString()
+    );
+
+    UsuarioBD objBD = new UsuarioBD();
+    PerfilDB perBD = new PerfilDB();
+    String rol = objUsuario.getRol();
+
+    System.out.println("[DEBUG] Iniciando registro de usuario...");
+
+    try (Connection conn = objetoConexionBD.conexionDataBase()) {
+
+        System.out.println("[DEBUG] Conexión establecida.");
+
+        int idGenerado = objBD.insertarUsuario(conn, objUsuario);
+        System.out.println("[DEBUG] ID generado por usuario: " + idGenerado);
+
+        if (idGenerado > 0) {
+            JOptionPane.showMessageDialog(null, "¡Usuario registrado correctamente! ID generado: " + idGenerado);
+
+            try {
+                System.out.println("[DEBUG] Insertando perfil...");
                 perBD.insertarPerfil(conn, objUsuario, idGenerado);
+                System.out.println("[DEBUG] Perfil insertado.");
                 JOptionPane.showMessageDialog(null, "¡Perfil insertado correctamente!");
-                
-                llenarDataTable();
-                if(tblUsuarios.getRowCount() > 0) {
-                    int ultimaFila = tblUsuarios.getRowCount() - 1;
-                    tblUsuarios.setRowSelectionInterval(ultimaFila, ultimaFila);
-                    llenarTextBox();
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "No se pudo registrar el usuario.");
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Error insertando perfil: " + e.getMessage());
+                e.printStackTrace();
             }
-        } catch (SQLException | ClassNotFoundException ex) {
-//            JOptionPane.showMessageDialog(null, "Error al registrar usuario: "+ ex.getMessage());
+
+//            if (rol.equalsIgnoreCase("paciente")) {
+//                try {
+//                    System.out.println("[DEBUG] Insertando paciente...");
+//                    objBD.insertarUsuario(conn, objUsuario);
+//                    JOptionPane.showMessageDialog(null, "¡Paciente insertado correctamente!");
+//                } catch (SQLException e) {
+//                    JOptionPane.showMessageDialog(null, "Error insertando paciente: " + e.getMessage());
+//                    e.printStackTrace();
+//                }
+            if (rol.equalsIgnoreCase("medico")) {
+                try {
+                    System.out.println("[DEBUG] Insertando personal médico...");
+                    objBD.insertarEmpleado(conn, objUsuario, idGenerado);
+                    JOptionPane.showMessageDialog(null, "¡Personal insertado correctamente!");
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(null, "Error insertando médico: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(null, "No se pudo registrar el usuario.");
         }
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Error general en registrarUsuario: " + e.getMessage());
+        e.printStackTrace();
     }
+}
     
     
 

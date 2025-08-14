@@ -84,7 +84,6 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
         jMenuAdmin = new javax.swing.JMenu();
         jMenuGestionarUsuarios = new javax.swing.JMenuItem();
         jMenuGestionarProfesionistas = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
         jMenuSalir = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -149,7 +148,6 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
             }
         });
         jMenuAdmin.add(jMenuGestionarProfesionistas);
-        jMenuAdmin.add(jMenuItem3);
 
         JmenuBar.add(jMenuAdmin);
 
@@ -292,7 +290,6 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuGestionarProfesionistas;
     private javax.swing.JMenuItem jMenuGestionarUsuarios;
     private javax.swing.JMenu jMenuHistorial;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenu jMenuPerfil;
     private javax.swing.JMenu jMenuReagendar;
     private javax.swing.JMenu jMenuSalir;
