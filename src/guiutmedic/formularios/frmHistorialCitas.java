@@ -1,10 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
- */
-package guiutmedic;
+
+package guiutmedic.formularios;
 
 import guiutmedic.clases.ConexionBD;
+import guiutmedic.clases.Usuario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,8 +19,11 @@ public class frmHistorialCitas extends javax.swing.JInternalFrame {
     /**
      * Creates new form frmHistorialCitas
      */
-    public frmHistorialCitas() {
+        private Usuario objetoMenuP; //variable del objeto local
+    public frmHistorialCitas(Usuario objUsuario) {
         initComponents();
+            this.objetoMenuP = objUsuario; 
+
          cargarHistorial();//CARGA LOS DATOS AL INICIAR
     }
 
@@ -43,7 +44,7 @@ public class frmHistorialCitas extends javax.swing.JInternalFrame {
             Object[] fila = new Object[7];
             fila[0] = rs.getInt("IdCita");
             fila[1] = rs.getInt("IdPaciente");
-            fila[2] = rs.getInt("IdMedico");
+            fila[2] = rs.getInt("IdPersonal");
             fila[3] = rs.getString("Profesion");
             fila[4] = rs.getDate("Fecha");
             fila[5] = rs.getString("Hora");

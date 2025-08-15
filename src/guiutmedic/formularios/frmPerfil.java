@@ -1,7 +1,9 @@
 
-package guiutmedic;
+package guiutmedic.formularios;
 
 import guiutmedic.clases.ConexionBD;
+import guiutmedic.clases.Perfil;
+import guiutmedic.clases.PerfilBD;
 import guiutmedic.clases.Usuario;
 import java.awt.Image;
 import java.sql.Connection;
@@ -101,17 +103,22 @@ public class frmPerfil extends javax.swing.JInternalFrame {
         jLabelIDUsuario = new javax.swing.JLabel();
         txtAlergias = new javax.swing.JTextField();
         txtIdUsuario = new javax.swing.JTextField();
-        jLabelIDUsuario6 = new javax.swing.JLabel();
+        lblPadecimientos = new javax.swing.JLabel();
         lblNombre = new javax.swing.JLabel();
         txtPadecimientos = new javax.swing.JTextField();
         txtNombre = new javax.swing.JTextField();
         lblMatricula = new javax.swing.JLabel();
         txtMatricula = new javax.swing.JTextField();
-        imageLabel = new javax.swing.JLabel();
-        uploadButton = new javax.swing.JButton();
+        lblFoto = new javax.swing.JLabel();
+        btnFoto = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         btnModificar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
+        btnRegistrarse = new javax.swing.JButton();
+        lblPaterno = new javax.swing.JLabel();
+        txtAPaterno = new javax.swing.JTextField();
+        lblMaterno = new javax.swing.JLabel();
+        txtAMaterno = new javax.swing.JTextField();
 
         setClosable(true);
         setTitle("Ventana de Perfil");
@@ -154,8 +161,8 @@ public class frmPerfil extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabelIDUsuario6.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
-        jLabelIDUsuario6.setText("Padecimientos:");
+        lblPadecimientos.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        lblPadecimientos.setText("Padecimientos:");
 
         lblNombre.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         lblNombre.setText("Nombre:");
@@ -166,6 +173,7 @@ public class frmPerfil extends javax.swing.JInternalFrame {
             }
         });
 
+        txtNombre.setToolTipText("hola");
         txtNombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNombreActionPerformed(evt);
@@ -182,19 +190,25 @@ public class frmPerfil extends javax.swing.JInternalFrame {
             }
         });
 
-        imageLabel.setBackground(new java.awt.Color(204, 204, 204));
-        imageLabel.setPreferredSize(new java.awt.Dimension(150, 150));
+        lblFoto.setBackground(new java.awt.Color(204, 204, 204));
+        lblFoto.setPreferredSize(new java.awt.Dimension(150, 150));
 
-        uploadButton.setText("subir foto");
-        uploadButton.addActionListener(new java.awt.event.ActionListener() {
+        btnFoto.setText("subir foto");
+        btnFoto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                uploadButtonActionPerformed(evt);
+                btnFotoActionPerformed(evt);
             }
         });
 
         btnModificar.setBackground(new java.awt.Color(255, 102, 102));
         btnModificar.setText("Modificar");
+        btnModificar.setToolTipText("Permite activar la modificacion de los campos  requeirdos");
         btnModificar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnModificar.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                btnModificarFocusGained(evt);
+            }
+        });
         btnModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnModificarActionPerformed(evt);
@@ -209,6 +223,14 @@ public class frmPerfil extends javax.swing.JInternalFrame {
             }
         });
 
+        btnRegistrarse.setBackground(new java.awt.Color(0, 153, 255));
+        btnRegistrarse.setText("Registrarse");
+        btnRegistrarse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarseActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -218,6 +240,8 @@ public class frmPerfil extends javax.swing.JInternalFrame {
                 .addComponent(btnModificar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnRegistrarse)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -226,9 +250,30 @@ public class frmPerfil extends javax.swing.JInternalFrame {
                 .addContainerGap(9, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnModificar)
-                    .addComponent(btnGuardar))
+                    .addComponent(btnGuardar)
+                    .addComponent(btnRegistrarse))
                 .addContainerGap())
         );
+
+        lblPaterno.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        lblPaterno.setText("A.Paterno:");
+
+        txtAPaterno.setToolTipText("hola");
+        txtAPaterno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtAPaternoActionPerformed(evt);
+            }
+        });
+
+        lblMaterno.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        lblMaterno.setText("A.Materno:");
+
+        txtAMaterno.setToolTipText("hola");
+        txtAMaterno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtAMaternoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -236,46 +281,54 @@ public class frmPerfil extends javax.swing.JInternalFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(imageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(uploadButton)))
-                .addGap(30, 30, 30)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(lblAlergias)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtAlergias, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(lblContacto)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtContacto, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabelIDUsuario6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtPadecimientos, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(lblTelefono)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(lblMatricula)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(lblNombre)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabelIDUsuario)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtIdUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(27, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(133, 133, 133))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(30, 30, 30)
+                                .addComponent(btnFoto)))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(lblAlergias)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtAlergias, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(lblContacto)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtContacto, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(lblPadecimientos)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtPadecimientos, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(lblTelefono)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(lblMatricula)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(lblNombre)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabelIDUsuario)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtIdUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(lblPaterno)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtAPaterno, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(lblMaterno)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtAMaterno, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(47, 47, 47)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -290,7 +343,15 @@ public class frmPerfil extends javax.swing.JInternalFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblNombre)
                             .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblPaterno)
+                            .addComponent(txtAPaterno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblMaterno)
+                            .addComponent(txtAMaterno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblMatricula)
                             .addComponent(txtMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -308,31 +369,30 @@ public class frmPerfil extends javax.swing.JInternalFrame {
                             .addComponent(txtAlergias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabelIDUsuario6)
+                            .addComponent(lblPadecimientos)
                             .addComponent(txtPadecimientos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(imageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(uploadButton)))
-                .addGap(21, 21, 21)
+                        .addComponent(btnFoto)))
+                .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(15, 15, 15))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -343,6 +403,8 @@ public class frmPerfil extends javax.swing.JInternalFrame {
         if (isMod) {
             this.setTitle("Ventana de Perfil (MODIFICANDO)");
             txtNombre.setEditable(true);
+            txtAPaterno.setEditable(true);
+            txtAMaterno.setEditable(true);
             txtTelefono.setEditable(true);
             txtContacto.setEditable(true);
             txtAlergias.setEditable(true);
@@ -352,6 +414,8 @@ public class frmPerfil extends javax.swing.JInternalFrame {
         } else {
             this.setTitle("Ventana de Perfil");
             txtNombre.setEditable(false);
+            txtAPaterno.setEditable(false);
+            txtAMaterno.setEditable(false);
             txtTelefono.setEditable(false);
             txtContacto.setEditable(false);
             txtAlergias.setEditable(false);
@@ -359,99 +423,141 @@ public class frmPerfil extends javax.swing.JInternalFrame {
             System.out.println("NO MODIFICANDO");
         }
     }
+ 
     
-    private void llenarDatos() throws ClassNotFoundException {
-    String sql = "SELECT p.idUsuario, p.nombre, p.apellido_paterno, p.apellido_materno, u.matricula, p.telefono, p.contactoEmergencia, p.alergias, p.condicionMedica, p.foto " +
-                 "FROM perfil p " +
-                 "INNER JOIN usuario u ON p.idUsuario = u.idUsuario " +
-                 "WHERE p.idUsuario = ?";
+    //lanzar consulta para saber si el idusuario tiene idperfil lanzo consulta si perfil sino consulta no perfil consultando perfil 
+
+private void llenarDatos() throws ClassNotFoundException {
+    String sql = "SELECT u.idUsuario, u.usuario, u.matricula, p.idPerfil, " +
+                 "p.nombre, p.apellido_paterno, p.apellido_materno, p.telefono, " +
+                 "p.contactoEmergencia, p.alergias, p.padecimientos, p.foto " +
+                 "FROM usuario u " +
+                 "LEFT JOIN perfil p ON u.idUsuario = p.idUsuario " +
+                 "WHERE u.idUsuario = ?";
 
     try {
         conn = objetoConexionBD.conexionDataBase();
-        int idDeseado1 = Integer.parseInt(idUsuarioDeseado);
+        int idDeseado = Integer.parseInt(idUsuarioDeseado);
 
         stmt = conn.prepareStatement(sql);
-        stmt.setInt(1, idDeseado1);
-
-        System.out.println("Consulta SQL: " + sql);
-
+        stmt.setInt(1, idDeseado);
         rs = stmt.executeQuery();
 
         if (rs.next()) {
+            // Siempre llenamos los campos básicos
             txtIdUsuario.setText(rs.getString("idUsuario"));
+            txtMatricula.setText(rs.getString("matricula") != null ? rs.getString("matricula") : "");
 
-            // Concatenar nombre completo
-            String nombreCompleto = rs.getString("nombre") + " " + 
-                                   rs.getString("apellido_paterno") + " " + 
-                                   rs.getString("apellido_materno");
+            // Nombre de usuario (tabla usuario)
+            String nombreUsuario = rs.getString("usuario") != null ? rs.getString("usuario") : "";
 
-            txtNombre.setText(nombreCompleto.trim());
-            txtMatricula.setText(rs.getString("matricula"));
-            txtTelefono.setText(rs.getString("telefono"));
-            txtContacto.setText(rs.getString("contactoEmergencia"));
-            txtAlergias.setText(rs.getString("alergias"));
-            txtPadecimientos.setText(rs.getString("condicionMedica"));
-            
-            System.out.println("ruta "+ rs.getString("foto"));
-             
-            
-             ImageIcon imageIcon = new ImageIcon(rs.getString("foto"));
+            if (rs.getString("idPerfil") != null) {
+                // --- USUARIO CON PERFIL ---
+                txtNombre.setText(rs.getString("nombre") != null ? rs.getString("nombre") : "");
+                txtAPaterno.setText(rs.getString("apellido_paterno") != null ? rs.getString("apellido_paterno") : "");
+                txtAMaterno.setText(rs.getString("apellido_materno") != null ? rs.getString("apellido_materno") : "");
+                txtTelefono.setText(rs.getString("telefono") != null ? rs.getString("telefono") : "");
+                txtContacto.setText(rs.getString("contactoEmergencia") != null ? rs.getString("contactoEmergencia") : "");
+                txtAlergias.setText(rs.getString("alergias") != null ? rs.getString("alergias") : "");
+                txtPadecimientos.setText(rs.getString("padecimientos") != null ? rs.getString("padecimientos") : "");
+
+                if (rs.getString("foto") != null) {
+                    ImageIcon imageIcon = new ImageIcon(rs.getString("foto"));
                     Image image = imageIcon.getImage();
-                    Image scaledImage = image.getScaledInstance(200, 150, Image.SCALE_SMOOTH); // Ajustar tamaño
-                    ImageIcon scaledImageIcon = new ImageIcon(scaledImage);
-                    imageLabel.setIcon(scaledImageIcon);
-            
-          
-            
-            
+                    Image scaledImage = image.getScaledInstance(200, 150, Image.SCALE_SMOOTH);
+                    lblFoto.setIcon(new ImageIcon(scaledImage));
+                } else {
+                    lblFoto.setIcon(null);
+                }
+
+                btnModificar.setVisible(true);
+                btnGuardar.setVisible(true);
+                btnRegistrarse.setVisible(false);
+
+            } else {
+                // --- USUARIO SIN PERFIL ---
+                txtNombre.setText(nombreUsuario); // usamos el nombre de usuario
+                txtAPaterno.setText("");
+                txtAMaterno.setText("");
+                txtTelefono.setText("");
+                txtContacto.setText("");
+                txtAlergias.setText("");
+                txtPadecimientos.setText("");
+                lblFoto.setIcon(null);
+
+                btnModificar.setVisible(true);
+                btnGuardar.setVisible(false);
+                btnRegistrarse.setVisible(true);
+            }
+
         } else {
-            JOptionPane.showMessageDialog(null, "¡Datos no localizados!");
+            JOptionPane.showMessageDialog(null, "¡Usuario no encontrado!");
         }
 
     } catch (SQLException ex) {
         Logger.getLogger(frmPerfil.class.getName()).log(Level.SEVERE, null, ex);
-    } 
-        System.out.println("llenarDatos() busca idUsuario: " + idUsuarioDeseado);
-
     }
 
-
-    
-    private void guardarDatos() throws ClassNotFoundException, SQLException {
-    String sql = "UPDATE perfil SET nombre = ?, apellido_paterno = ?, apellido_materno = ?, telefono = ?, contactoEmergencia = ?, alergias = ?, condicionMedica = ? ,foto = ? WHERE idUsuario = ?";
+    System.out.println("llenarDatos() busca idUsuario: " + idUsuarioDeseado);
+}
+   
+private void guardarDatos() throws ClassNotFoundException, SQLException {
     conn = objetoConexionBD.conexionDataBase();
-    int idDeseado1 = Integer.parseInt(idUsuarioDeseado);
+    int idUsuarioInt = Integer.parseInt(idUsuarioDeseado);
 
-    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-        
-        String[] nombres = txtNombre.getText().trim().split(" ", 3); // dividir en máximo 3 partes
+    // Verificamos si ya existe perfil
+    String checkSql = "SELECT idPerfil FROM perfil WHERE idUsuario=?";
+    try (PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
+        checkStmt.setInt(1, idUsuarioInt);
+        rs = checkStmt.executeQuery();
 
-        String nombre = nombres.length > 0 ? nombres[0] : "";
-        String apellidoPaterno = nombres.length > 1 ? nombres[1] : "";
-        String apellidoMaterno = nombres.length > 2 ? nombres[2] : "";
+        if (rs.next()) {
+            // --- Perfil existe: hacemos UPDATE ---
+            String sqlUpdate = "UPDATE perfil SET nombre=?, apellido_paterno=?, apellido_materno=?, telefono=?, contactoEmergencia=?, alergias=?, padecimientos=?, foto=? WHERE idUsuario=?";
+            try (PreparedStatement stmt = conn.prepareStatement(sqlUpdate)) {
+                stmt.setString(1, txtNombre.getText().trim());
+                stmt.setString(2, txtAPaterno.getText().trim());
+                stmt.setString(3, txtAMaterno.getText().trim());
+                stmt.setString(4, txtTelefono.getText().trim());
+                stmt.setString(5, txtContacto.getText().trim());
+                stmt.setString(6, txtAlergias.getText().trim());
+                stmt.setString(7, txtPadecimientos.getText().trim());
+                stmt.setString(8, ruta);
+                stmt.setInt(9, idUsuarioInt);
 
-        stmt.setString(1, nombre);
-        stmt.setString(2, apellidoPaterno);
-        stmt.setString(3, apellidoMaterno);
-        stmt.setString(4, txtTelefono.getText());
-        stmt.setString(5, txtContacto.getText());
-        stmt.setString(6, txtAlergias.getText());
-        stmt.setString(7, txtPadecimientos.getText());
-        stmt.setString(8, ruta);
-        stmt.setInt(9, idDeseado1);
+                int filas = stmt.executeUpdate();
+                if (filas > 0) {
+                    JOptionPane.showMessageDialog(this, "Perfil actualizado correctamente.");
+                }
+            }
 
-        int filasActualizadas = stmt.executeUpdate();
-
-        if (filasActualizadas > 0) {
-            System.out.println("Datos modificados correctamente.");
-            JOptionPane.showMessageDialog(this,"Datos modificados correctamente.");
         } else {
-            System.out.println("No se modificó ningún registro.");
+            // --- Perfil no existe: hacemos INSERT ---
+            String sqlInsert = "INSERT INTO perfil (idUsuario, nombre, apellido_paterno, apellido_materno, telefono, contactoEmergencia, alergias, padecimientos, foto) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            try (PreparedStatement stmt = conn.prepareStatement(sqlInsert)) {
+                stmt.setInt(1, idUsuarioInt);
+                stmt.setString(2, txtNombre.getText().trim());
+                stmt.setString(3, txtAPaterno.getText().trim());
+                stmt.setString(4, txtAMaterno.getText().trim());
+                stmt.setString(5, txtTelefono.getText().trim());
+                stmt.setString(6, txtContacto.getText().trim());
+                stmt.setString(7, txtAlergias.getText().trim());
+                stmt.setString(8, txtPadecimientos.getText().trim());
+                stmt.setString(9, ruta);
+
+                int filas = stmt.executeUpdate();
+                if (filas > 0) {
+                    JOptionPane.showMessageDialog(this, "Perfil registrado correctamente.");
+                    // Ahora que existe, habilitamos el botón Guardar
+                    btnGuardar.setVisible(true);
+                    btnRegistrarse.setVisible(false);
+                }
+            }
         }
     }
 }
 
-    
+
     private void txtIdUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdUsuarioActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIdUsuarioActionPerformed
@@ -473,16 +579,16 @@ public class frmPerfil extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPadecimientosActionPerformed
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        try {
-            // TODO add your handling code here:
-            isMod = false;
-            actualizarMod();
-            guardarDatos();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(frmPerfil.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(frmPerfil.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    try {
+        // Primero guardar datos mientras los campos están editables
+        guardarDatos();
+
+        // Luego deshabilitamos edición
+        isMod = false;
+        actualizarMod();
+    } catch (ClassNotFoundException | SQLException ex) {
+        Logger.getLogger(frmPerfil.class.getName()).log(Level.SEVERE, null, ex);
+    }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
@@ -492,10 +598,10 @@ public class frmPerfil extends javax.swing.JInternalFrame {
                     
     }//GEN-LAST:event_btnModificarActionPerformed
 
-    private void uploadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadButtonActionPerformed
+    private void btnFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFotoActionPerformed
         // TODO add your handling code here:
         
-         if (evt.getSource() == uploadButton) {
+         if (evt.getSource() == btnFoto) {
             int returnValue = fileChooser.showOpenDialog(this);
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = fileChooser.getSelectedFile();
@@ -506,28 +612,80 @@ public class frmPerfil extends javax.swing.JInternalFrame {
                     Image image = imageIcon.getImage();
                     Image scaledImage = image.getScaledInstance(200, 150, Image.SCALE_SMOOTH); // Ajustar tamaño
                     ImageIcon scaledImageIcon = new ImageIcon(scaledImage);
-                    imageLabel.setIcon(scaledImageIcon);
+                    lblFoto.setIcon(scaledImageIcon);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, "Error al cargar la imagen.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         }
-    }//GEN-LAST:event_uploadButtonActionPerformed
+    }//GEN-LAST:event_btnFotoActionPerformed
+
+    private void btnRegistrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarseActionPerformed
+
+
+     try (Connection conn = new ConexionBD().conexionDataBase()) {
+        Perfil perfil = new Perfil(rs.getInt("idUsuario"), rs.getString("nombre"), rs.getString("apellido_paterno"), rs.getString("apellido_materno"), rs.getString("matricula"), rs.getString("alergias"), rs.getString("padecimientos"));
+        perfil.setIdUsuario(Integer.parseInt(txtIdUsuario.getText()));
+        perfil.setNombre(txtNombre.getText());
+        perfil.setApellidoPaterno(txtAPaterno.getText());
+        perfil.setApellidoMaterno(txtAMaterno.getText());
+        perfil.setTelefono(txtTelefono.getText());
+        perfil.setContactoEmergencia(txtContacto.getText());
+        perfil.setAlergias(txtAlergias.getText());
+        perfil.setPadecimientos(txtPadecimientos.getText());
+
+        PerfilBD perfilBD = new PerfilBD();
+        int filas = perfilBD.registrarPerfil(conn, perfil);
+
+        if (filas > 0) {
+            JOptionPane.showMessageDialog(this, "Perfil registrado con éxito.");
+            btnRegistrarse.setVisible(false);
+            btnModificar.setVisible(true);
+            btnGuardar.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al registrar el perfil.");
+        }
+
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+    }   catch (ClassNotFoundException ex) {
+            Logger.getLogger(frmPerfil.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnRegistrarseActionPerformed
+
+    private void btnModificarFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_btnModificarFocusGained
+        // TODO add your handling code here:
+        btnModificar.getToolTipText(); 
+    }//GEN-LAST:event_btnModificarFocusGained
+
+    private void txtAPaternoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAPaternoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtAPaternoActionPerformed
+
+    private void txtAMaternoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAMaternoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtAMaternoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnFoto;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnModificar;
-    private javax.swing.JLabel imageLabel;
+    private javax.swing.JButton btnRegistrarse;
     private javax.swing.JLabel jLabelIDUsuario;
-    private javax.swing.JLabel jLabelIDUsuario6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblAlergias;
     private javax.swing.JLabel lblContacto;
+    private javax.swing.JLabel lblFoto;
+    private javax.swing.JLabel lblMaterno;
     private javax.swing.JLabel lblMatricula;
     private javax.swing.JLabel lblNombre;
+    private javax.swing.JLabel lblPadecimientos;
+    private javax.swing.JLabel lblPaterno;
     private javax.swing.JLabel lblTelefono;
+    private javax.swing.JTextField txtAMaterno;
+    private javax.swing.JTextField txtAPaterno;
     private javax.swing.JTextField txtAlergias;
     private javax.swing.JTextField txtContacto;
     private javax.swing.JTextField txtIdUsuario;
@@ -535,6 +693,5 @@ public class frmPerfil extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtPadecimientos;
     private javax.swing.JTextField txtTelefono;
-    private javax.swing.JButton uploadButton;
     // End of variables declaration//GEN-END:variables
 }

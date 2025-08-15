@@ -5,12 +5,31 @@ package guiutmedic.clases;
  * @author 
  */
 public class Usuario {
-    
+    private int idPerfil;
+
+public int getIdPerfil() {
+    return idPerfil;
+}
+
+public void setIdPerfil(int idPerfil) {
+    this.idPerfil = idPerfil;
+}
+
     private int idUsuario;
     private String matricula;
     private String password;
     private String usuario;
     private String rol;
+    private String profesion; // Agregar este campo
+
+    public String getProfesion() {
+        return profesion;
+    }
+
+    public void setProfesion(String profesion) {
+        this.profesion = profesion;
+    }
+
     
     public Usuario(String matricula, String password, String usuario, String rol){
           this.idUsuario = 0;

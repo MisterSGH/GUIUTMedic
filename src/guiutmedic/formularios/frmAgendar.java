@@ -1,4 +1,4 @@
-package guiutmedic;
+package guiutmedic.formularios;
 
 import com.raven.event.EventTimePicker;
 import java.awt.event.ItemEvent;
@@ -7,7 +7,7 @@ import com.toedter.calendar.JDateChooser;
 import guiutmedic.clases.Cita;
 import guiutmedic.clases.CitaBD;
 import guiutmedic.clases.ConexionBD;
-import guiutmedic.clases.PerfilDB;
+import guiutmedic.clases.PerfilBD;
 import guiutmedic.clases.PersonalSalud;
 import guiutmedic.clases.PersonalSaludBD;
 import guiutmedic.clases.Usuario;
@@ -173,7 +173,7 @@ public class frmAgendar extends javax.swing.JInternalFrame {
 
         lblHora.setText("Hora:");
 
-        timePicker1.setForeground(new java.awt.Color(0, 153, 204));
+        timePicker1.setForeground(new java.awt.Color(0, 153, 153));
         timePicker1.set24hourMode(false);
         timePicker1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -334,7 +334,7 @@ public class frmAgendar extends javax.swing.JInternalFrame {
                 Date fecha = formatoEntrada.parse(fechaInput); // convierte String a Date
                 String fechaMySQL = formatoMySQL.format(fecha); // convierte Date a String en formato MySQL
                 
-            PerfilDB perfilDB = new PerfilDB();
+            PerfilBD perfilDB = new PerfilBD();
             int idPerfil = perfilDB.obtenerIdPerfilPorIdUsuario(conn, objetoMenuP.getIdUsuario()); //metodo para obtener el idperfil del idusuario
 
             fechaMSQL=fechaMySQL;

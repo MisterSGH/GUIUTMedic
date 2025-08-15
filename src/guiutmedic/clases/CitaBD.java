@@ -17,7 +17,7 @@ public boolean registrarCita(Connection conn, Cita cita) throws SQLException {
     String sql = "INSERT INTO cita (idPerfil, idPersonal, idMotivo, fecha, hora, observaciones, estado) VALUES (?, ?, ?, ?, ?, ?, ?)";
     try (PreparedStatement ps = conn.prepareStatement(sql)) {
         ps.setInt(1, cita.getIdPerfil());
-        ps.setInt(2, cita.getIdMedico());
+        ps.setInt(2, cita.getIdPersonal());
         ps.setInt(3, cita.getIdMotivo());
         ps.setString(4, cita.getFecha());
         ps.setString(5, cita.getHora());

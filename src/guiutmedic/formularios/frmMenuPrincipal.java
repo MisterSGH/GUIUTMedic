@@ -1,5 +1,5 @@
 
-package guiutmedic;
+package guiutmedic.formularios;
 
 import guiutmedic.clases.Usuario;
 import guiutmedic.utilerias.fondoPantallaMenu;
@@ -33,34 +33,53 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     private Usuario objetoMenuP; //variable del objeto local
 
     public frmMenuPrincipal(Usuario objUsuario) {
-        
+    initComponents();    
     fondoPantallaMenu fondo = new fondoPantallaMenu();
 
     this.objetoMenuP = objUsuario; 
     System.out.println("Usuario recibido: " + objUsuario.getIdUsuario());
 
-    initComponents(); //inicializacion de componesntes del GUI
+    
     setExtendedState(JFrame.MAXIMIZED_BOTH);
 
     Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
     setSize(1160, 700);
     
-    // Se establece el título con el usuario y el rol, con espacios y separadores claros
+    
+   // Se establece el título con el usuario y el rol, con espacios y separadores claros
     this.setTitle("UTMEDIC  |  Usuario: " + objUsuario.getUsuario() + "  |  ROL: " + objUsuario.getRol());
     
-    //Se comienzan a mostrar/ocultar opciones del menu en base al rol del usuario logeado
-            if (objUsuario.getRol().equals("ADMIN")){ //rol administrador del sistema
-               jMenuAgendar.setVisible(false); 
-               jMenuReagendar.setVisible(false);  
-               jMenuHistorial.setVisible(false); 
-    
-            }else if (objUsuario.getRol().equals("paciente")){ //pacientes de el personal de salud
-//                opcUsuarios.setEnabled(false);
-//                opcLevantar.setEnabled(false);
-    
-            }else if (objUsuario.getRol().equals("medico")) { //medicos, psicologos, nutriologos
+//Se comienzan a mostrar/ocultar opciones del menu en base al rol del usuario logeado
+            if (objUsuario.getRol().equals("ADMIN")) {
+    jMenuPerfil.setVisible(true);
+    jMenuAgendar.setVisible(false);
+    jMenuReagendar.setVisible(false);
+    jMenuHistorial.setVisible(false);
+    jMenuAtender.setVisible(false);
+    jMenuAdmin.setVisible(true);
+    jMenuSalir.setVisible(true);
 
-                    }
+            } else if (objUsuario.getRol().equals("paciente")) {
+                
+    jMenuPerfil.setVisible(true);
+    jMenuAgendar.setVisible(true);
+    jMenuReagendar.setVisible(true);
+    jMenuHistorial.setVisible(true);
+    jMenuAtender.setVisible(false);
+    jMenuAdmin.setVisible(false);
+    jMenuSalir.setVisible(true);
+
+            } else if (objUsuario.getRol().equals("medico")) {
+                
+    jMenuPerfil.setVisible(true);
+    jMenuAgendar.setVisible(false);
+    jMenuReagendar.setVisible(false);
+    jMenuHistorial.setVisible(false);
+    jMenuAtender.setVisible(true);
+    jMenuAdmin.setVisible(false);
+    jMenuSalir.setVisible(true);
+
+} 
 
     if (desktopPane != null) {
         desktopPane.setBorder(fondo);
@@ -72,6 +91,13 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     } catch (NullPointerException e) {
         System.err.println("No se pudo cargar el icono de la aplicación: " + e.getMessage());
     }
+    
+    if (objUsuario.getRol().equals("ADMIN")) {
+        jMenuAdmin.setVisible(true);
+    } else {
+        jMenuAdmin.setVisible(false);
+    }
+    
 }
 
 
@@ -91,6 +117,10 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
         jMenuAgendar = new javax.swing.JMenu();
         jMenuReagendar = new javax.swing.JMenu();
         jMenuHistorial = new javax.swing.JMenu();
+        jMenuAtender = new javax.swing.JMenu();
+        jMenuAdmin = new javax.swing.JMenu();
+        jMenuGestionarUsuarios = new javax.swing.JMenuItem();
+        jMenuGestionarProfesionistas = new javax.swing.JMenuItem();
         jMenuSalir = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -103,7 +133,7 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
         );
         desktopPaneLayout.setVerticalGroup(
             desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 388, Short.MAX_VALUE)
+            .addGap(0, 389, Short.MAX_VALUE)
         );
 
         jMenuPerfil.setText("Perfil");
@@ -138,6 +168,34 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
         });
         JmenuBar.add(jMenuHistorial);
 
+        jMenuAtender.setText("Atender");
+        jMenuAtender.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenuAtenderMouseClicked(evt);
+            }
+        });
+        JmenuBar.add(jMenuAtender);
+
+        jMenuAdmin.setText("Gestion");
+
+        jMenuGestionarUsuarios.setText("Gestionar Usuarios");
+        jMenuGestionarUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuGestionarUsuariosActionPerformed(evt);
+            }
+        });
+        jMenuAdmin.add(jMenuGestionarUsuarios);
+
+        jMenuGestionarProfesionistas.setText("Gestionar Profesionistas");
+        jMenuGestionarProfesionistas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuGestionarProfesionistasActionPerformed(evt);
+            }
+        });
+        jMenuAdmin.add(jMenuGestionarProfesionistas);
+
+        JmenuBar.add(jMenuAdmin);
+
         jMenuSalir.setText("Salir");
         jMenuSalir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -162,6 +220,18 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jMenuSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuSalirMouseClicked
+        int opcion = JOptionPane.showConfirmDialog(this,
+        "¿Estas seguro de salir?",
+        "Confirmar salida de UTMEDIC",
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.QUESTION_MESSAGE);
+
+    if (opcion == JOptionPane.YES_OPTION) {
+        System.exit(0);
+    }
+    }//GEN-LAST:event_jMenuSalirMouseClicked
+
     private void jMenuPerfilMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuPerfilMouseClicked
         try {
             frmPerfil ventanaPerfil = new frmPerfil(objetoMenuP);
@@ -185,32 +255,51 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuAgendarMouseClicked
 
     private void jMenuReagendarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuReagendarMouseClicked
-         
-        int idCita = 123; 
-    int idPerfil = 456;
-        frmReagendar ventanaGUI = new frmReagendar(idCita, idPerfil);
-    this.desktopPane.add(ventanaGUI);
-    ventanaGUI.setVisible(true);
+        try{
+        frmReagendar ventanaReagendar = new frmReagendar(objetoMenuP);   
+        this.desktopPane.add(ventanaReagendar);
+        ventanaReagendar.setVisible(true); 
         
+        }catch (ClassNotFoundException ex) {
+            Logger.getLogger(frmMenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuReagendarMouseClicked
 
     private void jMenuHistorialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuHistorialMouseClicked
-        frmHistorialCitas ventanaGUI = new frmHistorialCitas();   
+        frmHistorialCitas ventanaGUI = new frmHistorialCitas(objetoMenuP);   
         this.desktopPane.add(ventanaGUI);
         ventanaGUI.setVisible(true);
     }//GEN-LAST:event_jMenuHistorialMouseClicked
 
-    private void jMenuSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuSalirMouseClicked
-        int opcion = JOptionPane.showConfirmDialog(this,
-            "¿Estas seguro de salir?",
-            "Confirmar salida de UTMEDIC",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE);
-
-        if (opcion == JOptionPane.YES_OPTION) {
-            System.exit(0);
+    private void jMenuGestionarUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuGestionarUsuariosActionPerformed
+        try {
+            frmGestionUsuarios ventanaGUI = new frmGestionUsuarios(objetoMenuP);
+            this.desktopPane.add(ventanaGUI);
+            ventanaGUI.setVisible(true);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(frmMenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jMenuSalirMouseClicked
+    }//GEN-LAST:event_jMenuGestionarUsuariosActionPerformed
+
+    private void jMenuGestionarProfesionistasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuGestionarProfesionistasActionPerformed
+        try {
+            frmGestionProfesionistas ventanaGUI = new frmGestionProfesionistas(objetoMenuP);
+            this.desktopPane.add(ventanaGUI);
+            ventanaGUI.setVisible(true);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(frmMenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuGestionarProfesionistasActionPerformed
+
+    private void jMenuAtenderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuAtenderMouseClicked
+    try {
+        frmAtender ventanaAtender = new frmAtender(objetoMenuP); // <-- aquí se pasa el usuario
+        this.desktopPane.add(ventanaAtender);
+        ventanaAtender.setVisible(true);
+    } catch (ClassNotFoundException ex) {
+        Logger.getLogger(frmAtender.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    }//GEN-LAST:event_jMenuAtenderMouseClicked
 
     /**
      * @param args the command line arguments
@@ -250,7 +339,11 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar JmenuBar;
     private javax.swing.JDesktopPane desktopPane;
+    private javax.swing.JMenu jMenuAdmin;
     private javax.swing.JMenu jMenuAgendar;
+    private javax.swing.JMenu jMenuAtender;
+    private javax.swing.JMenuItem jMenuGestionarProfesionistas;
+    private javax.swing.JMenuItem jMenuGestionarUsuarios;
     private javax.swing.JMenu jMenuHistorial;
     private javax.swing.JMenu jMenuPerfil;
     private javax.swing.JMenu jMenuReagendar;
