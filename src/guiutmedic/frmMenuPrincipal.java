@@ -192,7 +192,7 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuReagendarMouseClicked
 
     private void jMenuHistorialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuHistorialMouseClicked
-        frmHistorialCitas ventanaGUI = new frmHistorialCitas();   
+        frmHistorialCitas ventanaGUI = new frmHistorialCitas(objetoMenuP);   
         this.desktopPane.add(ventanaGUI);
         ventanaGUI.setVisible(true);
     }//GEN-LAST:event_jMenuHistorialMouseClicked

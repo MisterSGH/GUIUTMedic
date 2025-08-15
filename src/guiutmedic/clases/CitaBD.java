@@ -4,6 +4,8 @@ package guiutmedic.clases;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.ResultSet;
 
 /**Clase encargada de la gestion (CRUD) de las citas del sistema
  *
@@ -13,20 +15,30 @@ public class CitaBD {
 
     
     
-public boolean registrarCita(Connection conn, Cita cita) throws SQLException {
-    String sql = "INSERT INTO cita (idPerfil, idPersonal, idMotivo, fecha, hora, observaciones, estado) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    try (PreparedStatement ps = conn.prepareStatement(sql)) {
-        ps.setInt(1, cita.getIdPerfil());
-        ps.setInt(2, cita.getIdMedico());
-        ps.setInt(3, cita.getIdMotivo());
-        ps.setString(4, cita.getFecha());
-        ps.setString(5, cita.getHora());
-        ps.setString(6, cita.getObservaciones());
-        ps.setString(7, "Programada");
+public int registrarCita(Connection conn, Cita cita) throws SQLException {
+        String sql = "INSERT INTO cita (idPerfil, idPersonal, idMotivo, fecha, hora, observaciones, estado) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        int idCitaGenerada = -1; // Inicializamos la variable con un valor por defecto
 
-        int filas = ps.executeUpdate();
-        return filas > 0;
-    }
+        // Modificamos el PreparedStatement para que devuelva las claves generadas
+        try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setInt(1, cita.getIdPerfil());
+            ps.setInt(2, cita.getIdPersonal());
+            ps.setInt(3, cita.getIdMotivo());
+            ps.setString(4, cita.getFecha());
+            ps.setString(5, cita.getHora());
+            ps.setString(6, cita.getObservaciones());
+            ps.setString(7, "Programada");
+
+            ps.executeUpdate();
+
+            // Obtenemos el ResultSet de las claves generadas
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                // Si hay una fila, significa que se generó una clave
+                idCitaGenerada = rs.getInt(1);
+            }
+        }
+        return idCitaGenerada; // Devolvemos el ID de la cita
     }
 
 public boolean cancelarCita(Connection conn, int idCita, int idPerfil) throws SQLException {

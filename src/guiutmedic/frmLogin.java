@@ -21,11 +21,9 @@ public class frmLogin extends javax.swing.JFrame {
     /**
      * Creates new form frmLoginUusario
      */
-    
     boolean pressedUsuario = false;
     boolean pressedPass = false;
-    
-    
+
     public frmLogin() {
         initComponents();
     }
@@ -137,7 +135,7 @@ public class frmLogin extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
+
     private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtUsuarioActionPerformed
@@ -147,7 +145,7 @@ public class frmLogin extends javax.swing.JFrame {
             txtUsuario.setText("");
             txtUsuario.setForeground(Color.black);
             pressedUsuario = true;
-        }        
+        }
     }//GEN-LAST:event_txtUsuarioMousePressed
 
     private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
@@ -159,81 +157,78 @@ public class frmLogin extends javax.swing.JFrame {
             txtPassword.setText("");
             txtPassword.setForeground(Color.black);
             pressedPass = true;
-        } 
+        }
     }//GEN-LAST:event_txtPasswordMousePressed
 
     private void jButtonEntrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonEntrarMouseClicked
         // Este metodo captara los datos ingresados en txtUsuario y txtPassword
         // para su validaion
         // Aqui se programara la autenticacion del usuario
-         Usuario objUsuario = new Usuario();
-    objUsuario.setUsuario(txtUsuario.getText());
-    objUsuario.setPassword(new String(txtPassword.getPassword()));
+        Usuario objUsuario = new Usuario();
+        objUsuario.setUsuario(txtUsuario.getText());
+        objUsuario.setPassword(new String(txtPassword.getPassword()));
 
         //validando al usuario contra la base de datos
-         if (this.validarUsuario(objUsuario)) {
+        if (this.validarUsuario(objUsuario)) {
             //si el usuario es valido
-           try (Connection conn = new ConexionBD().conexionDataBase()) {
-            guiutmedic.clases.PerfilDB perfilDB = new guiutmedic.clases.PerfilDB(); // Asegúrate de importar bien
-            int idPerfil = perfilDB.obtenerIdPerfilPorIdUsuario(conn, objUsuario.getIdUsuario());
+            try (Connection conn = new ConexionBD().conexionDataBase()) {
+                guiutmedic.clases.PerfilDB perfilDB = new guiutmedic.clases.PerfilDB(); // Asegúrate de importar bien
+                int idPerfil = perfilDB.obtenerIdPerfilPorIdUsuario(conn, objUsuario.getIdUsuario());
 
-            
+                objUsuario.setIdPerfil(idPerfil);
 
-            objUsuario.setIdPerfil(idPerfil);
+                JOptionPane.showMessageDialog(this, "Bienvenido " + objUsuario.getUsuario());
 
-            JOptionPane.showMessageDialog(this, "Bienvenido " + objUsuario.getUsuario());
+                // Se oculta esta ventana
+                this.setVisible(false);
+                // Se construye el menú principal con el usuario completo
+                frmMenuPrincipal menuPrincipal = new frmMenuPrincipal(objUsuario);
+                menuPrincipal.setVisible(true);
+                this.dispose();
 
-            // Se oculta esta ventana
-            this.setVisible(false);
-            // Se construye el menú principal con el usuario completo
-            frmMenuPrincipal menuPrincipal = new frmMenuPrincipal(objUsuario);
-            menuPrincipal.setVisible(true);
-            this.dispose();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error en login: " + ex.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
 
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error en login: " + ex.getMessage(),
-                "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
         }
-
-    } else {
-        JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
-    }
     }//GEN-LAST:event_jButtonEntrarMouseClicked
 
-public boolean validarUsuario(Usuario objUsuario) {
-    boolean accesoPermitido = false;  
-    Connection conn;  
-    PreparedStatement stmt = null;  
-    ResultSet rs = null;  
+    public boolean validarUsuario(Usuario objUsuario) {
+        boolean accesoPermitido = false;
+        Connection conn;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
 
-    try {
-        ConexionBD objetoConexionBD = new ConexionBD();
-        conn = objetoConexionBD.conexionDataBase();
-        UsuarioBD bd = new UsuarioBD();
+        try {
+            ConexionBD objetoConexionBD = new ConexionBD();
+            conn = objetoConexionBD.conexionDataBase();
+            UsuarioBD bd = new UsuarioBD();
 
-        rs = bd.consultarUsuarioLogin(conn, objUsuario.getUsuario(), objUsuario.getPassword());
-        
-        if (rs.next()) {  // Encontró al usuario
-            objUsuario.setRol(rs.getString("rol"));
-            objUsuario.setIdUsuario(rs.getInt("idusuario"));
-            objUsuario.setMatricula(rs.getString("matricula"));  
-            accesoPermitido = true;
-            
-            System.out.println("Usuario validado: id=" + objUsuario.getIdUsuario() + ", usuario=" + objUsuario.getUsuario());
+            rs = bd.consultarUsuarioLogin(conn, objUsuario.getUsuario(), objUsuario.getPassword());
+
+            if (rs.next()) {  // Encontró al usuario
+                objUsuario.setRol(rs.getString("rol"));
+                objUsuario.setIdUsuario(rs.getInt("idusuario"));
+                objUsuario.setMatricula(rs.getString("matricula"));
+                accesoPermitido = true;
+
+                System.out.println("Usuario validado: id=" + objUsuario.getIdUsuario() + ", usuario=" + objUsuario.getUsuario());
+            }
+
+            // Guarda el id para uso interno si quieres
+//        idUsuarioActual = rs.getInt(1);
+            objetoConexionBD.cerrarConexion(conn);
+
+        } catch (HeadlessException | ClassNotFoundException | SQLException ex) {
+            // Manejo de errores
         }
 
-        // Guarda el id para uso interno si quieres
-//        idUsuarioActual = rs.getInt(1);
-
-        objetoConexionBD.cerrarConexion(conn);
-
-    } catch (HeadlessException | ClassNotFoundException | SQLException ex) {
-        // Manejo de errores
+        return accesoPermitido;
     }
 
-    return accesoPermitido;
-}
-    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -266,9 +261,7 @@ public boolean validarUsuario(Usuario objUsuario) {
             }
         });
     }
- 
-    
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel backround;

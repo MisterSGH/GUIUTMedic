@@ -8,7 +8,7 @@ package guiutmedic.clases;
 public class Cita {
     private int idCita;
     private int idPerfil; // Requerido para conocer el cuadro completo del paciente
-    private int idMedico;
+    private int idPersonal;
     private String profesion;
     private int idMotivo;
     private String motivo;
@@ -23,7 +23,7 @@ public class Cita {
     // Constructor sin idCita (se genera en la BD)
     public Cita(int idPerfil, int idMedico, int idMotivo, String fecha, String hora, String observaciones, String estado) {
         this.idPerfil = idPerfil;
-        this.idMedico = idMedico;
+        this.idPersonal = idMedico;
         this.idMotivo = idMotivo;
         this.fechaMSQL = fecha;
         this.hora = hora;
@@ -45,7 +45,7 @@ public class Cita {
     public Cita(int idCita, int idPerfil, int idMedico, int idMotivo, String fecha, String hora, String observaciones, String estado) {
         this.idCita = idCita;
         this.idPerfil = idPerfil;
-        this.idMedico = idMedico;
+        this.idPersonal = idMedico;
         this.idMotivo = idMotivo;
         this.fechaMSQL = fecha;
         this.hora = hora;
@@ -60,8 +60,8 @@ public class Cita {
     public int getIdPerfil() 
     { return idPerfil; }
     
-    public int getIdMedico() 
-    { return idMedico; }
+    public int getIdPersonal() 
+    { return idPersonal; }
     
     public int getIdMotivo() 
     { return idMotivo; }
@@ -85,8 +85,8 @@ public class Cita {
     public void setIdPerfil(int idPerfil) 
     { this.idPerfil = idPerfil; }
     
-    public void setIdMedico(int idMedico)
-    { this.idMedico = idMedico; }
+    public void setPersonal(int idMedico)
+    { this.idPersonal = idPersonal; }
     
     public void setIdMotivo(int idMotivo)
     { this.idMotivo = idMotivo; }

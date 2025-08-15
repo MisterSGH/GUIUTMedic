@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
- */
+
 package guiutmedic;
 
 import guiutmedic.clases.ConexionBD;
@@ -10,7 +7,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
-
+import guiutmedic.clases.Usuario; // Agrega esta importación
+import guiutmedic.clases.PerfilDB; // SE agrega est
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -18,12 +18,23 @@ import javax.swing.JOptionPane;
  */
 public class frmHistorialCitas extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form frmHistorialCitas
-     */
-    public frmHistorialCitas() {
+    private Usuario objetoMenuP;
+    private int idPerfilActual;
+    
+    public frmHistorialCitas(Usuario objUsuario) {
         initComponents();
-         cargarHistorial();//CARGA LOS DATOS AL INICIAR
+        this.objetoMenuP = objUsuario;
+        // Obtenemos el idPerfil al inicializar el formulario
+        try {
+            ConexionBD conexion = new ConexionBD();
+            Connection con = conexion.conexionDataBase();
+            PerfilDB perfilDB = new PerfilDB();
+            this.idPerfilActual = perfilDB.obtenerIdPerfilPorIdUsuario(con, objetoMenuP.getIdUsuario());
+            conexion.cerrarConexion(con);
+        } catch (Exception ex) {
+            Logger.getLogger(frmHistorialCitas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        cargarHistorial(); // Ahora el método cargarHistorial usará el idPerfilActual
     }
 
     
@@ -32,34 +43,37 @@ public class frmHistorialCitas extends javax.swing.JInternalFrame {
     modeloTabla.setRowCount(0); // Limpia la tabla antes de cargar datos nuevos
 
     try {
-        ConexionBD conexion = new ConexionBD(); // Crear instancia de la clase de conexión
-        Connection con = conexion.conexionDataBase(); // Obtener la conexión
+            ConexionBD conexion = new ConexionBD();
+            Connection con = conexion.conexionDataBase();
 
-        String sql = "SELECT * FROM historial_citas";
-        PreparedStatement ps = con.prepareStatement(sql);
-        ResultSet rs = ps.executeQuery();
+            // Modificación aquí: la consulta ahora filtra por el IdPaciente
+            String sql = "SELECT * FROM historial_citas WHERE IdPaciente = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, idPerfilActual); // Se usa el idPerfil del usuario actual
+            ResultSet rs = ps.executeQuery();
 
-        while (rs.next()) {
-            Object[] fila = new Object[7];
-            fila[0] = rs.getInt("IdCita");
-            fila[1] = rs.getInt("IdPaciente");
-            fila[2] = rs.getInt("IdMedico");
-            fila[3] = rs.getString("Profesion");
-            fila[4] = rs.getDate("Fecha");
-            fila[5] = rs.getString("Hora");
-            fila[6] = rs.getString("MotivoConsulta");
+            while (rs.next()) {
+                Object[] fila = new Object[7];
+                fila[0] = rs.getInt("IdCita");
+                fila[1] = rs.getInt("IdPaciente");
+                fila[2] = rs.getInt("IdPersonal");
+                fila[3] = rs.getString("Profesion");
+                fila[4] = rs.getDate("Fecha");
+                fila[5] = rs.getString("Hora");
+                fila[6] = rs.getString("MotivoConsulta");
 
-            modeloTabla.addRow(fila);
+                modeloTabla.addRow(fila);
+            }
+
+            rs.close();
+            ps.close();
+            conexion.cerrarConexion(con);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar historial: " + e.getMessage());
+            e.printStackTrace(); // Es buena práctica imprimir el stack trace para depurar
         }
-
-        rs.close();
-        ps.close();
-        conexion.cerrarConexion(con);
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error al cargar historial: " + e.getMessage());
     }
-}
     
     
     /**

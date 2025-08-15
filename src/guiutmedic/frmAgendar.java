@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import java.sql.PreparedStatement;
 
 
 /**
@@ -324,46 +325,75 @@ public class frmAgendar extends javax.swing.JInternalFrame {
     
     private void btnAgendarCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgendarCitaActionPerformed
         
+       try {
+        conn = objetoConexionBD.conexionDataBase();
+        String fechaInput = txtFecha.getText();
+        SimpleDateFormat formatoEntrada = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat formatoMySQL = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date fecha = formatoEntrada.parse(fechaInput);
+        String fechaMySQL = formatoMySQL.format(fecha);
+
+        PerfilDB perfilDB = new PerfilDB();
+        int idPerfil = perfilDB.obtenerIdPerfilPorIdUsuario(conn, objetoMenuP.getIdUsuario());
+
+        fechaMSQL = fechaMySQL;
+        String hora = txtHora.getText();
+
+        // 1. Obtener la profesión del especialista
+        String especialistaSeleccionado = cboEspecialista.getSelectedItem().toString();
+        String[] partesE = especialistaSeleccionado.split(" - ");
+        int numeroE = Integer.parseInt(partesE[0]);
+        String profesionMedico = partesE[2];
+
+        // 2. Obtener el motivo de la consulta completo
+        String motivoSeleccionado = cboMotivo.getSelectedItem().toString();
+        String[] partesM = motivoSeleccionado.split(" - ");
+        int numeroM = Integer.parseInt(partesM[0]);
+        String motivoConsulta = motivoSeleccionado;
+
+        // Validaciones básicas antes de continuar
+        if ("-Seleccionar-".equals(especialistaSeleccionado) || "-Seleccionar-".equals(motivoSeleccionado)) {
+            JOptionPane.showMessageDialog(this, "Por favor, selecciona un especialista y un motivo.");
+            return;
+        }
+
+        Cita cita = new Cita(idPerfil, numeroE, numeroM, fechaMSQL, hora, "", "");
+
+        CitaBD bd = new CitaBD();
+        // 3. Capturar el ID de la cita generada
+        int idCitaGenerada = bd.registrarCita(conn, cita);
+
+        if (idCitaGenerada > 0) {
+            // 4. Si la cita se registró con éxito, insertar en historial_citas
+            String sqlInsertHistorial = "INSERT INTO historial_citas (IdCita, IdPaciente, IdPersonal, Profesion, Fecha, Hora, MotivoConsulta) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            try (PreparedStatement pstmtHistorial = conn.prepareStatement(sqlInsertHistorial)) {
+                pstmtHistorial.setInt(1, idCitaGenerada);
+                pstmtHistorial.setInt(2, idPerfil);
+                pstmtHistorial.setInt(3, numeroE);
+                pstmtHistorial.setString(4, profesionMedico);
+                pstmtHistorial.setString(5, fechaMySQL);
+                pstmtHistorial.setString(6, hora);
+                pstmtHistorial.setString(7, motivoConsulta);
+                pstmtHistorial.executeUpdate();
+                JOptionPane.showMessageDialog(this, "Cita agendada correctamente y guardada en el historial.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "No se pudo agendar la cita. Verifica los datos.");
+        }
+
+    } catch (ClassNotFoundException | SQLException | ParseException ex) {
+        Logger.getLogger(frmAgendar.class.getName()).log(Level.SEVERE, null, ex);
+        JOptionPane.showMessageDialog(this, "Error al agendar la cita: " + ex.getMessage());
+    } finally {
         try {
-            
-            conn = objetoConexionBD.conexionDataBase();
-            String fechaInput = txtFecha.getText(); // ej: "15/08/2025"
-            SimpleDateFormat formatoEntrada = new SimpleDateFormat("dd/MM/yyyy");
-            SimpleDateFormat formatoMySQL = new SimpleDateFormat("yyyy-MM-dd");
-
-                Date fecha = formatoEntrada.parse(fechaInput); // convierte String a Date
-                String fechaMySQL = formatoMySQL.format(fecha); // convierte Date a String en formato MySQL
-                
-            PerfilDB perfilDB = new PerfilDB();
-            int idPerfil = perfilDB.obtenerIdPerfilPorIdUsuario(conn, objetoMenuP.getIdUsuario()); //metodo para obtener el idperfil del idusuario
-
-            fechaMSQL=fechaMySQL;
-            String hora = txtHora.getText();
-            String[] partesE = cboEspecialista.getSelectedItem().toString().split(" - ");
-            int numeroE = Integer.parseInt(partesE[0]);
-            System.out.println(numeroE);
-            String[] partesM = cboMotivo.getSelectedItem().toString().split(" - ");
-            int numeroM = Integer.parseInt(partesM[0]);
-            System.out.println(numeroM);
-                        
-            Cita cita = new Cita(idPerfil, numeroE, numeroM, fechaMSQL, hora, "", ""); //constructor de la cita
-            
-            CitaBD bd = new CitaBD();
-            boolean exito = bd.registrarCita(conn, cita);
-            if (exito) {
-                JOptionPane.showMessageDialog(this, "Cita agendada correctamente.");
-            } else {
-                JOptionPane.showMessageDialog(this, "No se pudo agendar la cita. Verifica los datos.");
-                }
-
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(frmAgendar.class.getName()).log(Level.SEVERE, null, ex);
+            if (conn != null) {
+                objetoConexionBD.cerrarConexion(conn);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(frmAgendar.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(frmAgendar.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, "Formato de fecha inválido. Use dd/MM/yyyy");
         }
+    }
     }//GEN-LAST:event_btnAgendarCitaActionPerformed
 
     private void cboEspecialistaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboEspecialistaActionPerformed
