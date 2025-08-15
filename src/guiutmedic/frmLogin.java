@@ -1,6 +1,5 @@
 package guiutmedic;
 
-
 import guiutmedic.clases.ConexionBD;
 import guiutmedic.clases.Usuario;
 import guiutmedic.clases.UsuarioBD;
@@ -60,16 +59,16 @@ public class frmLogin extends javax.swing.JFrame {
         lblBienvenido.setFont(new java.awt.Font("Inter", 3, 14)); // NOI18N
         lblBienvenido.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblBienvenido.setText("Bienvenido");
-        backround.add(lblBienvenido, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, 90, 30));
+        backround.add(lblBienvenido, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 90, 30));
 
         lblIcono.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblIcono.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblIcono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/guiutmedic/imagenes/icono.jpeg"))); // NOI18N
-        backround.add(lblIcono, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, -1, 190));
+        lblIcono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/guiutmedic/imagenes/iconoLogin.jpeg"))); // NOI18N
+        backround.add(lblIcono, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, 280, 250));
 
         lblUsuario.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         lblUsuario.setText("Usuario:");
-        backround.add(lblUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 60, -1));
+        backround.add(lblUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 300, 60, -1));
 
         txtUsuario.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         txtUsuario.setForeground(new java.awt.Color(102, 102, 102));
@@ -85,17 +84,17 @@ public class frmLogin extends javax.swing.JFrame {
                 txtUsuarioActionPerformed(evt);
             }
         });
-        backround.add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 230, 170, -1));
+        backround.add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 300, 170, -1));
 
         jSeparator2.setForeground(new java.awt.Color(0, 153, 153));
-        backround.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 250, 180, 10));
+        backround.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 320, 180, 10));
 
         lblContraseña.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         lblContraseña.setText("Contraseña:");
-        backround.add(lblContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, 70, -1));
+        backround.add(lblContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 340, 70, -1));
 
         jSeparator3.setForeground(new java.awt.Color(0, 153, 153));
-        backround.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 290, 180, 10));
+        backround.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 360, 180, 10));
 
         txtPassword.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         txtPassword.setText("aaaaaaaa");
@@ -110,7 +109,7 @@ public class frmLogin extends javax.swing.JFrame {
                 txtPasswordActionPerformed(evt);
             }
         });
-        backround.add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 270, 170, -1));
+        backround.add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 340, 170, -1));
 
         jButtonEntrar.setBackground(new java.awt.Color(0, 153, 153));
         jButtonEntrar.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
@@ -121,17 +120,21 @@ public class frmLogin extends javax.swing.JFrame {
                 jButtonEntrarMouseClicked(evt);
             }
         });
-        backround.add(jButtonEntrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 310, -1, -1));
+        backround.add(jButtonEntrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 370, 100, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(backround, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(backround, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(backround, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(backround, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
