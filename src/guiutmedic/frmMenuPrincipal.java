@@ -33,23 +33,41 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     private Usuario objetoMenuP; //variable del objeto local
 
     public frmMenuPrincipal(Usuario objUsuario) {
+        
     fondoPantallaMenu fondo = new fondoPantallaMenu();
 
     this.objetoMenuP = objUsuario; 
     System.out.println("Usuario recibido: " + objUsuario.getIdUsuario());
 
-    initComponents();
+    initComponents(); //inicializacion de componesntes del GUI
     setExtendedState(JFrame.MAXIMIZED_BOTH);
 
     Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
     setSize(1160, 700);
+    
+    // Se establece el título con el usuario y el rol, con espacios y separadores claros
+    this.setTitle("UTMEDIC  |  Usuario: " + objUsuario.getUsuario() + "  |  ROL: " + objUsuario.getRol());
+    
+    //Se comienzan a mostrar/ocultar opciones del menu en base al rol del usuario logeado
+            if (objUsuario.getRol().equals("ADMIN")){ //rol administrador del sistema
+               jMenuAgendar.setVisible(false); 
+               jMenuReagendar.setVisible(false);  
+               jMenuHistorial.setVisible(false); 
+    
+            }else if (objUsuario.getRol().equals("paciente")){ //pacientes de el personal de salud
+//                opcUsuarios.setEnabled(false);
+//                opcLevantar.setEnabled(false);
+    
+            }else if (objUsuario.getRol().equals("medico")) { //medicos, psicologos, nutriologos
+
+                    }
 
     if (desktopPane != null) {
         desktopPane.setBorder(fondo);
     }
 
     try {
-        ImageIcon iconoApp = new ImageIcon(getClass().getResource("/guiutmedic/imagenes/icono.jpeg"));
+        ImageIcon iconoApp = new ImageIcon(getClass().getResource("/guiutmedic/imagenes/iconoLogin.jpeg"));
         setIconImage(iconoApp.getImage());
     } catch (NullPointerException e) {
         System.err.println("No se pudo cargar el icono de la aplicación: " + e.getMessage());
@@ -144,18 +162,6 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuSalirMouseClicked
-        int opcion = JOptionPane.showConfirmDialog(this,
-        "¿Estas seguro de salir?",
-        "Confirmar salida de UTMEDIC",
-        JOptionPane.YES_NO_OPTION,
-        JOptionPane.QUESTION_MESSAGE);
-
-    if (opcion == JOptionPane.YES_OPTION) {
-        System.exit(0);
-    }
-    }//GEN-LAST:event_jMenuSalirMouseClicked
-
     private void jMenuPerfilMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuPerfilMouseClicked
         try {
             frmPerfil ventanaPerfil = new frmPerfil(objetoMenuP);
@@ -193,6 +199,18 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
         this.desktopPane.add(ventanaGUI);
         ventanaGUI.setVisible(true);
     }//GEN-LAST:event_jMenuHistorialMouseClicked
+
+    private void jMenuSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuSalirMouseClicked
+        int opcion = JOptionPane.showConfirmDialog(this,
+            "¿Estas seguro de salir?",
+            "Confirmar salida de UTMEDIC",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE);
+
+        if (opcion == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
+    }//GEN-LAST:event_jMenuSalirMouseClicked
 
     /**
      * @param args the command line arguments
