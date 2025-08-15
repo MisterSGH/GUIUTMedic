@@ -44,6 +44,16 @@ public class Usuario {
         this.matricula = matricula;
         this.rol = rol;
     }
+    
+    public Usuario(int idUsuario, String matricula, String password, String rol, String usuario) {
+        this.idUsuario = idUsuario;
+        this.idPaciente = 0;
+        this.idPerfil = 0;
+        this.usuario = usuario;
+        this.password = password;
+        this.matricula = matricula;
+        this.rol = rol;
+    }
 
     // Setters
     public void setIdUsuario(int idUsuario) {
